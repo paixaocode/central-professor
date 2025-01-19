@@ -1,0 +1,52 @@
+<po-page-edit class="animate-fade-in" p-title="Novo Registro"
+    p-subtitle="Preencha o formulário abaixo para se cadastrar" (p-save)="saveRegister()" (p-cancel)="cancelRegister()"
+    [formGroup]="registerForm" [p-disable-submit]="!registerForm.valid">
+
+    <po-input class="po-md-4" p-label="Nome Completo" formControlName="nomeCompleto" p-required="true"
+        [p-show-required]="true" p-clean>
+    </po-input>
+
+    <po-input class="po-md-4" p-label="Sobrenome" formControlName="sobrenome" p-required="true" [p-show-required]="true"
+        p-clean>
+    </po-input>
+
+    <po-datepicker class="po-md-4" p-label="Data de Nascimento" p-type="date" formControlName="dataNascimento"
+        p-required="true" [p-show-required]="true" p-clean>
+    </po-datepicker>
+
+    <po-input class="po-md-4" p-label="CPF" p-type="text" p-mask="999.999.999-99" formControlName="cpf"
+        p-required="true" [p-show-required]="true" p-clean>
+    </po-input>
+
+    <po-input class="po-md-4" p-label="Telefone" p-type="text" p-mask="(99) 99999-9999" formControlName="telefone"
+        p-required="true" [p-show-required]="true" p-clean>
+    </po-input>
+
+    <po-email class="po-md-4" p-label="E-mail" p-type="email" formControlName="email" p-required="true"
+        [p-show-required]="true" p-clean>
+    </po-email>
+
+    <po-select class="po-md-4" p-label="Gênero" [p-options]="[
+    { label: 'Masculino', value: '1'},
+    { label: 'Feminino', value: '2' },
+    { label: 'Outros', value: '3' },
+    ]" formControlName="genero" p-required="true" [p-show-required]="true" p-clean>
+    </po-select>
+
+    <po-divider class="po-row" p-label="Informações de Acesso">
+    </po-divider>
+
+    <po-password class="po-md-6" p-label="Senha" formControlName="senha" p-required="true" [p-show-required]="true"
+        p-clean [p-minlength]="8" [p-maxlength]="30" p-help="
+    A senha deve conter pelo menos 1 letra maiúscula, 1 número e 1 caractere especial.">
+    </po-password>
+
+
+    <po-password class="po-md-6" p-label="Confirme a senha" formControlName="confirmarSenha" p-required="true"
+        [p-show-required]="true" p-clean [p-minlength]="8" [p-maxlength]="30">
+    </po-password>
+    <div *ngIf="registerForm.get('confirmarSenha')?.hasError('passwordMismatch')">
+        <p class="error-text">As senhas não correspondem.</p>
+    </div>
+
+</po-page-edit>
