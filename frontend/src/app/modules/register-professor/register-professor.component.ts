@@ -74,7 +74,7 @@ export class RegisterProfessorComponent {
     if (this.registerForm.valid) {
       this.router.navigate(['/login']);
     } else {
-      console.log('Formulário inválido');
+      console.log('pau no form')
     }
   }
 

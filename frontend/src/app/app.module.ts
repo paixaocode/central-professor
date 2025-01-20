@@ -9,16 +9,15 @@ import { RouterModule } from '@angular/router';
 import { PoTemplatesModule } from '@po-ui/ng-templates';
 import { FormsModule } from '@angular/forms';
 import { MenuModule } from './modules/menu/menu.module';
-import { CadastroProvaComponent } from './modules/cadastro-prova/cadastro-prova.component';
-
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 @NgModule({
   declarations: [
-    AppComponent,
-    CadastroProvaComponent
+    AppComponent
   ],
   bootstrap: [AppComponent],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
     PoModule,
     RouterModule.forRoot([]),

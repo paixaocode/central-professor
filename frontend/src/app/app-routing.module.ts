@@ -1,3 +1,4 @@
+// app-routing.module.ts
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { MenuComponent } from './modules/menu/menu.component';
@@ -23,8 +24,14 @@ export const routes: Routes = [
         loadChildren: () =>
           import('./modules/home/home.module').then((m) => m.HomeModule),
       },
+      {
+        path: 'cadastro-prova',
+        loadChildren: () =>
+          import('./modules/cadastro-prova/cadastro-prova.module').then((m) => m.CadastroProvaModule),
+      },
     ],
   },
+  { path: '**', redirectTo: 'home' }
 ];
 
 @NgModule({

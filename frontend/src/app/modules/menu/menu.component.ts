@@ -10,9 +10,6 @@ import { PoMenuItem } from '@po-ui/ng-components';
 })
 export class MenuComponent {
   menuItems: Array<PoMenuItem> = []
-  saudacao: string = ''
-  nameUser: string = ''
-  isAdmin: boolean = false;
 
   constructor() {
     
@@ -22,10 +19,8 @@ export class MenuComponent {
   }
 
   readonly menus: Array<PoMenuItem> = [
-
     { label: 'Home', link: "home", shortLabel: "Home", icon: "   ph ph-house-line" },
     { label: 'Cadastro de Provas', link: "cadastro-prova", shortLabel: "Cad. Prova", icon: "ph ph-clipboard-text" },
     { label: 'Sair', link: '/', shortLabel: 'Sair', icon: 'ph ph-sign-out' }
-    
   ];
 }
