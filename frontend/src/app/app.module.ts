@@ -10,9 +10,11 @@ import { PoTemplatesModule } from '@po-ui/ng-templates';
 import { FormsModule } from '@angular/forms';
 import { MenuModule } from './modules/menu/menu.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MestreAcaoComponent } from './mestre-acao/mestre-acao.component';
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    MestreAcaoComponent
   ],
   bootstrap: [AppComponent],
   imports: [

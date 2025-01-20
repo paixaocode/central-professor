@@ -21,6 +21,7 @@ export class MenuComponent {
   readonly menus: Array<PoMenuItem> = [
     { label: 'Home', link: "home", shortLabel: "Home", icon: "   ph ph-house-line" },
     { label: 'Cadastro de Provas', link: "cadastro-prova", shortLabel: "Cad. Prova", icon: "ph ph-clipboard-text" },
+    { label: 'Mestre em Ação', link: "mestre-acao", shortLabel: "Mestre", icon: "ph ph-chalkboard-teacher" },
     { label: 'Sair', link: '/', shortLabel: 'Sair', icon: 'ph ph-sign-out' }
   ];
 }
