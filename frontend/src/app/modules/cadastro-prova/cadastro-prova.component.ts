@@ -4,6 +4,8 @@ import { CadastroProvaService } from './cadastro-prova.service';
 import { Router } from '@angular/router';
 import { FormGerarProvaManualService } from './form-gerar-prova-manual/form-gerar-prova-manual.service';
 import { FormGerarProvaIaService } from './form-gerar-prova-ia/form-gerar-prova-ia.service';
+import { PoNotificationService } from '@po-ui/ng-components';
+
 @Component({
   selector: 'app-cadastro-prova',
   templateUrl: './cadastro-prova.component.html',
@@ -43,7 +45,8 @@ export class CadastroProvaComponent {
     private cadastroProvaService: CadastroProvaService,
     private route: Router,
     private formProvaManualService: FormGerarProvaManualService,
-    private formProvaIaService: FormGerarProvaIaService
+    private formProvaIaService: FormGerarProvaIaService,
+    private poNotification: PoNotificationService
   ) { }
 
   ngOnInit(): void {
@@ -115,18 +118,26 @@ export class CadastroProvaComponent {
 
   private processCriarNovaProva() {
     let formData;
-
+  
     if (this.isGerarProvaIA) {
       formData = this.formProvaIaService.getFormData();
     } else {
       formData = this.formProvaManualService.getFormData();
     }
-
+  
     if (formData) {
-      console.log('d form', formData)
+      this.route.navigate(['/cadastro-prova/incluir'], {
+        state: { 
+          formData: formData, 
+          isGerarProvaIA: this.isGerarProvaIA 
+        }
+      });
     } else {
-      console.error('erro caiu no else');
+      this.poNotification.error('Houve um erro ao criar a prova. Por favor, tente novamente.');
+      this._closeModalCriarNovaProva();
+      this.atualizarEstadoBotaoLoadingModal();
     }
   }
+  
 }
 

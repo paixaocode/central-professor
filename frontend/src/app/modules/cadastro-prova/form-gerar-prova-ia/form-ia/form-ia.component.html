@@ -1,0 +1,19 @@
+<div>
+    <h3>Formulário IA</h3>
+    
+    <div *ngIf="formData">
+      <pre>{{ formData | json }}</pre>
+    </div>
+    
+    <div>
+      <strong>Gerar Prova com IA: </strong>
+      {{ isGerarProvaIA ? 'Sim' : 'Não' }}
+    </div>
+  
+    <div *ngIf="formData">
+      <label for="quantidade-questoes">qtd</label>
+      <input type="number" id="quantidade-questoes" [(ngModel)]="formData.quantidadeQuestao" />
+      
+    </div>
+  </div>
+  
