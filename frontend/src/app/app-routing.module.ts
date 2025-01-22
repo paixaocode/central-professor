@@ -29,6 +29,11 @@ export const routes: Routes = [
         loadChildren: () =>
           import('./modules/cadastro-prova/cadastro-prova.module').then((m) => m.CadastroProvaModule),
       },
+      {
+        path: 'mestre-acao',
+        loadChildren: () =>
+          import('./modules/mestre-acao/mestre-acao.module').then((m) => m.MestreAcaoModule),
+      }
     ],
   },
   { path: '**', redirectTo: 'home' }

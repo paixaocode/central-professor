@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { VIDEOS } from './mestre-acao.constants';
 
 @Component({
   selector: 'app-mestre-acao',
@@ -6,5 +7,7 @@ import { Component } from '@angular/core';
   styleUrl: './mestre-acao.component.css'
 })
 export class MestreAcaoComponent {
+  videosDicas: Array<any> = VIDEOS.DICAS;
 
+  
 }
