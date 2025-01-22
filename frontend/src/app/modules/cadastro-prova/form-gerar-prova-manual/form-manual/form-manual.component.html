@@ -1,7 +1,7 @@
 <app-toolbar [title]="'Prova - ' + formData.nomeProva"></app-toolbar>
-
 <po-page-default>
   <div class="po-row animate-fade-in">
+    
     <po-list-view class="po-md-12" p-property-title="nomeProva" [p-items]="[{
         nomeProva: formData.nomeProva,
         formatoProva: formData.formatoProva,
@@ -11,25 +11,34 @@
         disciplina: formData.disciplina
       }]">
       <ng-template p-list-view-content-template let-item>
+
         <div class="po-row">
+
           <po-info class="po-md-4" p-label="Nome da Prova" [p-value]="item.nomeProva"></po-info>
           <po-info class="po-md-4" p-label="Formato da Prova" [p-value]="item.formatoProva"></po-info>
           <po-info class="po-md-4" p-label="Nota Máxima" [p-value]="item.notaMaximaProva"></po-info>
           <po-info class="po-md-4" p-label="Turma" [p-value]="item.turmaProva"></po-info>
           <po-info class="po-md-4" p-label="Quantidade de Questões" [p-value]="item.quantidadeQuestoes"></po-info>
           <po-info class="po-md-4" p-label="Disciplina" [p-value]="item.disciplina"></po-info>
+
         </div>
       </ng-template>
+
     </po-list-view>
+
   </div>
 
   <div class="animate-fade-in">
     <div class="po-row po-mt-1 po-mb-2">
-      <po-button class="po-md-3" p-label="Voltar" p-kind="secondary" (p-click)="onClickVoltar()">
+
+      <po-button class="po-md-3" p-label="Voltar" p-kind="secondary" (p-click)="onClickVoltar()"
+        [ngClass]="{ 'po-md-12': isReadonly }">
       </po-button>
 
-      <po-button class="po-md-9" p-label="Salvar" p-icon="ph ph-floppy-disk" p-kind="primary" (p-click)="onSubmit()" [p-disabled]="form.invalid">
+      <po-button *ngIf="!isReadonly" class="po-md-9" p-label="Salvar" p-icon="ph ph-floppy-disk" p-kind="primary"
+        (p-click)="onSubmit()" [p-disabled]="form.invalid">
       </po-button>
+
     </div>
   </div>
 
@@ -37,55 +46,40 @@
     <div *ngIf="formData?.quantidadeQuestoes" class="animate-fade-in">
       <div formArrayName="questoes">
         <div *ngFor="let questao of questoes.controls; let index = index" [formGroupName]="index">
-          
+
           <po-input class="po-md-12" [p-upper-case]="true" p-icon="ph ph-question" p-required="true"
-            [p-show-required]="true" p-clean formControlName="texto" p-label="Questão {{ index + 1 }}"></po-input>
-  
+            [p-show-required]="true" p-clean formControlName="texto" p-label="Questão {{ index + 1 }}"
+            p-readonly="isReadonly">
+          </po-input>
+
           <div class="po-row">
-            <mat-radio-group formControlName="respostaCorreta" (ngModelChange)="onRadioChange($event, index)" class="custom-radio-group">
-              
+            <mat-radio-group formControlName="respostaCorreta" (ngModelChange)="onRadioChange($event, index)"
+              [disabled]="isReadonly" class="custom-radio-group">
+
               <mat-radio-button style="margin-top: 10px;" class="po-md-1" value="A">A</mat-radio-button>
-              <po-input 
-                class="po-md-11" 
-                [p-upper-case]="true" 
-                p-placeholder="Resposta A" 
-                formControlName="A" 
-                [p-icon]="getIcon(index, 'A')"></po-input>
-  
+              <po-input class="po-md-11" [p-upper-case]="true" p-placeholder="Resposta A" formControlName="A"
+                p-readonly="isReadonly"></po-input>
+
               <mat-radio-button style="margin-top: 10px;" class="po-md-1" value="B">B</mat-radio-button>
-              <po-input 
-                class="po-md-11" 
-                [p-upper-case]="true" 
-                p-placeholder="Resposta B" 
-                formControlName="B" 
-                [p-icon]="getIcon(index, 'B')"></po-input>
-  
+              <po-input class="po-md-11" [p-upper-case]="true" p-placeholder="Resposta B" formControlName="B"
+                p-readonly="isReadonly"></po-input>
+
               <mat-radio-button style="margin-top: 10px;" class="po-md-1" value="C">C</mat-radio-button>
-              <po-input 
-                class="po-md-11" 
-                [p-upper-case]="true" 
-                p-placeholder="Resposta C" 
-                formControlName="C" 
-                [p-icon]="getIcon(index, 'C')"></po-input>
-  
+              <po-input class="po-md-11" [p-upper-case]="true" p-placeholder="Resposta C" formControlName="C"
+                p-readonly="isReadonly"></po-input>
+
               <mat-radio-button style="margin-top: 10px;" class="po-md-1" value="D">D</mat-radio-button>
-              <po-input 
-                class="po-md-11" 
-                [p-upper-case]="true" 
-                p-placeholder="Resposta D" 
-                formControlName="D" 
-                [p-icon]="getIcon(index, 'D')"></po-input>
-  
+              <po-input class="po-md-11" [p-upper-case]="true" p-placeholder="Resposta D" formControlName="D"
+                p-readonly="isReadonly"></po-input>
             </mat-radio-group>
           </div>
         </div>
       </div>
     </div>
   </form>
-  
-  
 
   <div class="po-row" [style.height.vh]="15"></div>
 
   <app-chatbot></app-chatbot>
+
 </po-page-default>

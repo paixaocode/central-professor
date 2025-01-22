@@ -1,3 +1,15 @@
-<po-toolbar class="animate-fade-in" 
-[p-title]="title">
-</po-toolbar>
+<style>
+    .sample-container {
+      margin-top: 50px;
+    }
+  </style>
+  
+  <po-toolbar
+    p-actions-icon="ph ph-shopping-cart-simple"
+    [p-profile]="profile"
+    [p-profile-actions]="profileActions"
+    [p-notification-actions]="notificationActions"
+    [p-notification-number]="getNotificationNumber()"
+    [p-title]="title"
+  >
+  </po-toolbar>

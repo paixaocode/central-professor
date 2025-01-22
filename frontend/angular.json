@@ -27,6 +27,7 @@
             "assets": [
               "src/assets",
               "src/favicon.ico",
+              "src/json/configGemini.json",
               {
                 "glob": "**/*",
                 "input": "node_modules/@po-ui/style/images",
@@ -40,8 +41,7 @@
               "node_modules/@po-ui/style/css/po-theme-core.min.css"
             ],
             "scripts": [
-              "node_modules/core-js/stable/index.js",
-              "node_modules/core-js/es/array/index.js"
+              "node_modules/jspdf/dist/jspdf.umd.min.js"
             ]
           },
           "configurations": {

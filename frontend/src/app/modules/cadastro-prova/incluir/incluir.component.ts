@@ -13,8 +13,10 @@ interface FormDataState {
 })
 export class IncluirComponent implements OnInit {
   
-  formData: any;
-  isGerarProvaIA: boolean = false;
+  public formData: any;
+  public isGerarProvaIA: boolean = false;
+
+  public isVisualizar: boolean = false;
 
   constructor(private location: Location) { }
 

@@ -36,7 +36,6 @@ export class LoginComponent {
 
 
   onLoginSubmit(event : any) {
-    console.log(event)
     this.router.navigate(['/home']);
   }
 

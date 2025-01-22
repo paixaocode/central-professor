@@ -1,7 +1,7 @@
 <div *ngIf="isGerarProvaIA; else manualForm">
-    <app-form-ia [formData]="formData" [isGerarProvaIA]="isGerarProvaIA"></app-form-ia>
+    <app-form-ia [formData]="formData" [isReadonly]="isVisualizar"></app-form-ia>
 </div>
 
 <ng-template #manualForm>
-    <app-form-manual [formData]="formData" [isGerarProvaIA]="isGerarProvaIA"></app-form-manual>
+    <app-form-manual [formData]="formData" [isReadonly]="isVisualizar" readonlyData></app-form-manual>
 </ng-template>

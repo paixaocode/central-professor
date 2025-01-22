@@ -13,7 +13,6 @@ export class ChatbotComponent {
   contentVisible: boolean = false;
 
   onChatbotClick() {
-    console.log('chat abriu');
     this.pageSlideChatBot.open();
 
     setTimeout(() => {

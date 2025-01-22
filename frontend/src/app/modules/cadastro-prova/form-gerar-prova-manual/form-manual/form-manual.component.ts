@@ -2,19 +2,6 @@ import { Component, Input, OnInit, OnChanges } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { Router } from '@angular/router';
 
-interface Respostas {
-  A: string;
-  B: string;
-  C: string;
-  D: string;
-}
-
-interface Questao {
-  texto: string;
-  respostas: Respostas;
-  respostaCorreta: string;
-}
-
 @Component({
   selector: 'app-form-manual',
   templateUrl: './form-manual.component.html',
@@ -22,10 +9,11 @@ interface Questao {
 })
 export class FormManualComponent implements OnInit, OnChanges {
   @Input() formData: any = {};
-  @Input() isGerarProvaIA: boolean = false;
+  @Input() isReadonly: boolean = false;
+  @Input() readonlyData: any = {};
   form: FormGroup = new FormGroup({});
 
-  constructor(private fb: FormBuilder, private route: Router) { }
+  constructor(private fb: FormBuilder, private route: Router) {}
 
   ngOnInit() {
     this.createForm();
@@ -42,7 +30,7 @@ export class FormManualComponent implements OnInit, OnChanges {
   }
 
   get questoes() {
-    return (this.form.get('questoes') as FormArray);
+    return this.form.get('questoes') as FormArray;
   }
 
   createForm() {
@@ -50,14 +38,16 @@ export class FormManualComponent implements OnInit, OnChanges {
 
     if (this.formData?.quantidadeQuestoes) {
       for (let i = 0; i < this.formData.quantidadeQuestoes; i++) {
-        formArray.push(this.fb.group({
-          texto: ['', Validators.required],
-          A: ['', Validators.required],
-          B: ['', Validators.required],
-          C: ['', Validators.required],
-          D: ['', Validators.required],
-          respostaCorreta: ['', Validators.required],
-        }));
+        formArray.push(
+          this.fb.group({
+            texto: [{ value: '', disabled: this.isReadonly }, Validators.required],
+            A: [{ value: '', disabled: this.isReadonly }, Validators.required],
+            B: [{ value: '', disabled: this.isReadonly }, Validators.required],
+            C: [{ value: '', disabled: this.isReadonly }, Validators.required],
+            D: [{ value: '', disabled: this.isReadonly }, Validators.required],
+            respostaCorreta: [{ value: '', disabled: this.isReadonly }, Validators.required],
+          })
+        );
       }
     }
 
@@ -75,21 +65,27 @@ export class FormManualComponent implements OnInit, OnChanges {
     const question = this.formData.questoes[questionIndex];
     question.respostaCorreta = selectedOption;
     question.respostas[selectedOption] = 'x';
-
   }
-  
+
   getIcon(index: number, option: string): string {
     const respostaCorreta = this.questoes.at(index).get('respostaCorreta')?.value;
-    
+
     if (respostaCorreta === option) {
       return 'ph ph-check';
     } else {
       return 'ph ph-smiley-sad';
     }
   }
-  
+
   onSubmit() {
+    if (this.isReadonly) return;
+
     const prova = {
+      nomeProva: this.formData.nomeProva,
+      formatoProva: this.formData.formatoProva,
+      notaMaximaProva: this.formData.notaMaximaProva,
+      turmaProva: this.formData.turmaProva,
+      disciplina: this.formData.disciplina,
       quantidadeQuestoes: this.formData.quantidadeQuestoes,
       questoes: this.form.value.questoes.map((questao: any, index: number) => ({
         texto: questao.texto,
@@ -100,20 +96,8 @@ export class FormManualComponent implements OnInit, OnChanges {
           D: questao.D,
         },
         respostaCorreta: questao.respostaCorreta,
-      }))
+      })),
     };
-
-  }
-
-  isFormValid(): boolean {
-
-    const formValid = this.form.valid;
-    this.form.controls['questoes'].value.forEach((questao: any, index: number) => {
-      console.log(`questap ${index + 1} - ok`,
-        questao.texto && questao.A && questao.B && questao.C && questao.D && questao.respostaCorreta
-      );
-    });
-
-    return formValid;
+    console.log('prova', prova);
   }
 }

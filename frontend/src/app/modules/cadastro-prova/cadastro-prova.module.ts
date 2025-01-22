@@ -12,9 +12,12 @@ import { ToolbarModule } from '../toolbar/toolbar.module';
 import { FormManualComponent } from './form-gerar-prova-manual/form-manual/form-manual.component';
 import { FormIaComponent } from './form-gerar-prova-ia/form-ia/form-ia.component';
 import { MatRadioModule } from '@angular/material/radio';
+import { ExcluirComponent } from './excluir/excluir.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+
 
 @NgModule({
-  declarations: [CadastroProvaComponent, FormGerarProvaIaComponent, FormGerarProvaManualComponent, IncluirComponent, FormManualComponent, FormIaComponent],
+  declarations: [CadastroProvaComponent, FormGerarProvaIaComponent, FormGerarProvaManualComponent, IncluirComponent, FormManualComponent, FormIaComponent, ExcluirComponent],
   imports: [
     CommonModule,
     PoModule,
@@ -23,7 +26,8 @@ import { MatRadioModule } from '@angular/material/radio';
     ReactiveFormsModule,
     ChatbotModule,
     ToolbarModule,
-    MatRadioModule
+    MatRadioModule,
+    MatProgressSpinnerModule
   ]
 })
 export class CadastroProvaModule { }

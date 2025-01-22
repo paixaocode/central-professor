@@ -1,0 +1,33 @@
+<div class="animate-fade-in" style="text-align: center; font-family: Arial, sans-serif;">
+    <font class="po-font-text" style="font-size: 16px; color: #333;">
+        <span style="font-size: 20px; color: red;">❌</span>
+        Tem certeza que deseja excluir a prova de
+        <b style="text-transform: uppercase; font-size: 18px; color: #2a5d84;">{{ this.dadosProva.disciplinaProva }}</b>
+    </font>
+ 
+    <br><br>
+ 
+    <font class="po-font-text" style="font-size: 14px; color: #777;">
+        <i>Esta ação será irreversível. Todos os dados associados à prova serão excluídos permanentemente.</i>
+    </font>
+ 
+    <br><br>
+ 
+    <font class="po-font-text" style="font-size: 14px; color: #555;">
+        <i>Que tal baixar uma cópia da prova antes de excluir?</i>
+    </font>
+ 
+    <div style="margin-top: 20px;">
+        <span 
+          *ngIf="!isLoading"
+          style="font-size: 20px; color: #2a5d84; cursor: pointer; transition: all 0.3s ease;"
+          (click)="baixarCopiaDaProva()" 
+          onmouseover="this.style.color='#1c4063';"
+          onmouseout="this.style.color='#2a5d84';">
+          📥 BAIXAR CÓPIA
+        </span>
+        <div *ngIf="isLoading" style="display: flex; justify-content: center; align-items: center; margin-top: 20px;">
+            <mat-spinner [diameter]="30" style="color: #1e6c9b;"></mat-spinner>
+        </div>
+    </div>
+</div>
