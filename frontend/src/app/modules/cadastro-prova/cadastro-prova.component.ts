@@ -1,9 +1,11 @@
 import { Component, ViewChild } from '@angular/core';
-import { PoModalAction, PoModalComponent, PoTableColumn } from '@po-ui/ng-components';
+import { PoModalAction, PoModalComponent, PoTableAction, PoTableColumn } from '@po-ui/ng-components';
 import { CadastroProvaService } from './cadastro-prova.service';
 import { Router } from '@angular/router';
 import { FormGerarProvaManualService } from './form-gerar-prova-manual/form-gerar-prova-manual.service';
 import { FormGerarProvaIaService } from './form-gerar-prova-ia/form-gerar-prova-ia.service';
+import { PoNotificationService } from '@po-ui/ng-components';
+
 @Component({
   selector: 'app-cadastro-prova',
   templateUrl: './cadastro-prova.component.html',
@@ -12,6 +14,8 @@ import { FormGerarProvaIaService } from './form-gerar-prova-ia/form-gerar-prova-
 export class CadastroProvaComponent {
 
   @ViewChild('modalNovaProva') modalNovaProva!: PoModalComponent;
+  @ViewChild('modalExcluirProva', { static: false }) modalExcluirProva!: PoModalComponent;
+
 
   public colunasTabelaCadastroProva: Array<PoTableColumn> = [];
   public itemsCadastroProva: Array<any> = [];
@@ -19,6 +23,8 @@ export class CadastroProvaComponent {
 
   public isFormManualValid: boolean = false;
   public isFormIAValid: boolean = false;
+  public isExibirExcluir: boolean = false;
+  public provaSelecionada: any = null;
 
   confirmarNovaProva: PoModalAction = {
     action: () => {
@@ -37,13 +43,50 @@ export class CadastroProvaComponent {
     danger: true
   };
 
+  confirmarExclusaoProva: PoModalAction = {
+    action: () => {
+      this.processExcluirProva();
+    },
+    label: 'Confirmar',
+    loading: false,
+    disabled: false,
+    danger: true
+  };
+
+  closeModalExcluirProva: PoModalAction = {
+    action: () => {
+      this._closeModalExcluirProva();
+    },
+    label: 'Cancelar',
+    danger: true
+  };
+
+  public acoesTabelaCadastroProva: Array<PoTableAction> = [
+    {
+      action: this.onVisualizarProva.bind(this),
+      icon: 'ph ph-eye',
+      label: 'Visualizar',
+    },
+    {
+      action: this.onEditarProva.bind(this),
+      icon: 'ph ph-pencil-simple',
+      label: 'Editar',
+    },
+    {
+      action: this.onExcluirProva.bind(this),
+      icon: 'ph ph-trash',
+      label: 'Excluir',
+    }
+  ];
+
   isFormValid: boolean = false;
 
   constructor(
     private cadastroProvaService: CadastroProvaService,
     private route: Router,
     private formProvaManualService: FormGerarProvaManualService,
-    private formProvaIaService: FormGerarProvaIaService
+    private formProvaIaService: FormGerarProvaIaService,
+    private poNotification: PoNotificationService
   ) { }
 
   ngOnInit(): void {
@@ -69,10 +112,10 @@ export class CadastroProvaComponent {
     this.itemsCadastroProva = [
       { codigoProva: 'P001', nomeProva: 'Prova de Matemática - 1º Semestre', disciplinaProva: 'Matemática', formatoProva: 'Presencial', notaMaximaProva: '10', turmaProva: '1º Ano A', status: 'statusProvaAtiva' },
       { codigoProva: 'P002', nomeProva: 'Prova de Física - 2º Semestre', disciplinaProva: 'Física', formatoProva: 'Presencial', notaMaximaProva: '10', turmaProva: '2º Ano B', status: 'statusProvaEmElaboracao' },
-      { codigoProva: 'P003', nomeProva: 'Prova de História - 1º Semestre', disciplinaProva: 'História', formatoProva: 'Presencial', notaMaximaProva: '15', turmaProva: '3º Ano C', status: 'statusProvaRecebido' },
+      { codigoProva: 'P003', nomeProva: 'Prova de História - 1º Semestre', disciplinaProva: 'História', formatoProva: 'Presencial', notaMaximaProva: '15', turmaProva: '3º Ano C', status: 'statusProvaAtiva' },
       { codigoProva: 'P004', nomeProva: 'Prova de Geografia - 1º Semestre', disciplinaProva: 'Geografia', formatoProva: 'Online', notaMaximaProva: '10', turmaProva: '1º Ano B', status: 'statusProvaAtiva' },
       { codigoProva: 'P005', nomeProva: 'Prova de Química - 3º Semestre', disciplinaProva: 'Química', formatoProva: 'Presencial', notaMaximaProva: '20', turmaProva: '2º Ano A', status: 'statusProvaInativa' },
-      { codigoProva: 'P006', nomeProva: 'Prova de Português - 2º Semestre', disciplinaProva: 'Português', formatoProva: 'Online', notaMaximaProva: '15', turmaProva: '1º Ano A', status: 'statusProvaRecebido' },
+      { codigoProva: 'P006', nomeProva: 'Prova de Português - 2º Semestre', disciplinaProva: 'Português', formatoProva: 'Online', notaMaximaProva: '15', turmaProva: '1º Ano A', status: 'statusProvaAtiva' },
       { codigoProva: 'P007', nomeProva: 'Prova de Matemática - 2º Semestre', disciplinaProva: 'Matemática', formatoProva: 'Online', notaMaximaProva: '10', turmaProva: '3º Ano B', status: 'statusProvaAtiva' },
       { codigoProva: 'P008', nomeProva: 'Prova de Física - 1º Semestre', disciplinaProva: 'Física', formatoProva: 'Presencial', notaMaximaProva: '15', turmaProva: '2º Ano C', status: 'statusProvaEmElaboracao' },
       { codigoProva: 'P009', nomeProva: 'Prova de História - 2º Semestre', disciplinaProva: 'História', formatoProva: 'Online', notaMaximaProva: '20', turmaProva: '1º Ano C', status: 'statusProvaInativa' },
@@ -90,10 +133,13 @@ export class CadastroProvaComponent {
     this.atualizarEstadoBotaoLoadingModal();
     this.modalNovaProva.open();
   }
-  
 
   private _closeModalCriarNovaProva() {
     this.modalNovaProva.close();
+  }
+
+  private _closeModalExcluirProva(){
+    this.modalExcluirProva.close();
   }
 
 
@@ -111,7 +157,23 @@ export class CadastroProvaComponent {
     this.formProvaManualService.resetFormData();
     this.formProvaIaService.resetFormData();
   }
-  
+
+  private onVisualizarProva(prova: any) {
+    console.log('Visualizar Prova: ', prova);
+  }
+
+  private onEditarProva(prova: any) {
+    console.log('Editar Prova: ', prova);
+  }
+
+  private onExcluirProva(prova: any) {
+    this.provaSelecionada = prova;
+    this.modalExcluirProva.open();
+  }
+
+  private processExcluirProva() {
+    console.log(this.provaSelecionada);
+  }
 
   private processCriarNovaProva() {
     let formData;
@@ -123,10 +185,18 @@ export class CadastroProvaComponent {
     }
 
     if (formData) {
-      console.log('d form', formData)
+      this.route.navigate(['/cadastro-prova/incluir'], {
+        state: {
+          formData: formData,
+          isGerarProvaIA: this.isGerarProvaIA
+        }
+      });
     } else {
-      console.error('erro caiu no else');
+      this.poNotification.error('Houve um erro ao criar a prova. Por favor, tente novamente.');
+      this._closeModalCriarNovaProva();
+      this.atualizarEstadoBotaoLoadingModal();
     }
   }
+
 }
 

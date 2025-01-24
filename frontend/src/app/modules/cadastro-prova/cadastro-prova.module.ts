@@ -7,16 +7,27 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FormGerarProvaIaComponent } from './form-gerar-prova-ia/form-gerar-prova-ia.component';
 import { FormGerarProvaManualComponent } from './form-gerar-prova-manual/form-gerar-prova-manual.component';
 import { ChatbotModule } from '../chatbot/chatbot.module';
+import { IncluirComponent } from './incluir/incluir.component';
+import { ToolbarModule } from '../toolbar/toolbar.module';
+import { FormManualComponent } from './form-gerar-prova-manual/form-manual/form-manual.component';
+import { FormIaComponent } from './form-gerar-prova-ia/form-ia/form-ia.component';
+import { MatRadioModule } from '@angular/material/radio';
+import { ExcluirComponent } from './excluir/excluir.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+
 
 @NgModule({
-  declarations: [CadastroProvaComponent, FormGerarProvaIaComponent, FormGerarProvaManualComponent],
+  declarations: [CadastroProvaComponent, FormGerarProvaIaComponent, FormGerarProvaManualComponent, IncluirComponent, FormManualComponent, FormIaComponent, ExcluirComponent],
   imports: [
     CommonModule,
     PoModule,
     CadastroProvaRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    ChatbotModule
+    ChatbotModule,
+    ToolbarModule,
+    MatRadioModule,
+    MatProgressSpinnerModule
   ]
 })
 export class CadastroProvaModule { }

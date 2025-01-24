@@ -10,6 +10,7 @@ import { PoTemplatesModule } from '@po-ui/ng-templates';
 import { FormsModule } from '@angular/forms';
 import { MenuModule } from './modules/menu/menu.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 @NgModule({
   declarations: [
     AppComponent,
@@ -23,10 +24,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     RouterModule.forRoot([]),
     PoTemplatesModule,
     FormsModule,
-    MenuModule,
+    MenuModule
   ],
   providers: [
-    provideHttpClient(withInterceptorsFromDi())
+    provideHttpClient(withInterceptorsFromDi()),
+    provideAnimationsAsync()
   ]
 })
 export class AppModule { }
