@@ -1,0 +1,59 @@
+<po-page-default>
+  <div class="animate-fade-in">
+    <div class="po-mt-1 po-row">
+      <h1 class="po-md-12 po-font-title">Mestre em Ação</h1>
+    </div>
+    <div class="po-mt-1 po-row">
+      <p class="po-md-12 po-font-text-large">Eleve o potencial da sua turma e impulsione sua jornada profissional! Descubra dicas práticas para um engajamento transformador e treinamentos que vão impulsionar seu desenvolvimento profissional</p>
+    </div>
+    <po-divider p-border-width="small" class="po-m-3">
+    </po-divider>
+    <div class="po-mt-2 po-row">
+      <h2 class="po-md-12 po-font-subtitle">Dicas</h2>
+      <div class="po-offset-lg-2 po-offset-xl-2 po-xl-8 po-lg-8 po-md-8 po-sm-12">
+        <po-slide
+          [p-slides]="videosDicas"
+          [p-interval]=6000
+          [p-height]="550"
+          >
+          <ng-template p-slide-content-template let-item>
+              <iframe width="100%" height="100%" [src]="item" title="YouTube video player"     frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+              </iframe>
+          </ng-template>
+        </po-slide>
+      </div>
+    </div>
+    <po-divider p-border-width="large">
+    </po-divider>
+    <div class="po-mt-1 po-row">
+      <h2 class="po-md-12 po-font-subtitle">Treinamentos</h2>
+      <div class="po-offset-lg-2 po-offset-xl-2 po-xl-8 po-lg-8 po-md-8 po-sm-12">
+        <po-slide
+          [p-slides]="videosTreinamentos"
+          [p-interval]=6000
+          [p-height]="550"
+          >
+          <ng-template p-slide-content-template let-item>
+              <iframe width="100%" height="100%" [src]="item" title="YouTube video player"     frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+              </iframe>
+          </ng-template>
+        </po-slide>
+      </div>
+    </div>
+    <div class="po-mt-1 po-row">
+      <h2 class="po-md-12 po-font-subtitle">Mestre Digital</h2>
+      <div class="po-offset-lg-2 po-offset-xl-2 po-xl-8 po-lg-8 po-md-8 po-sm-12">
+        <po-slide
+          [p-slides]="videosTecnologias"
+          [p-interval]=6000
+          [p-height]="550"
+          >
+          <ng-template p-slide-content-template let-item>
+              <iframe width="100%" height="100%" [src]="item" title="YouTube video player"     frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+              </iframe>
+          </ng-template>
+        </po-slide>
+      </div>
+    </div>
+  </div>
+</po-page-default>
