@@ -1,0 +1,46 @@
+<app-toolbar [title]="'Cadastro de Questão'"></app-toolbar>
+
+<po-page-default>
+
+    <div class="animate-fade-in">
+        <div class="po-mt-1 po-row">
+            <po-button class="po-md-2 po-mt-1" p-label="Voltar" p-kind="secundary" (p-click)="onClickVoltar()">
+            </po-button>
+
+            <po-button class="po-md-3 po-mt-1" p-label="Nova prova" p-kind="primary"
+                (p-click)="onClickAbrirModalNovaQuestao()">
+            </po-button>
+
+            <po-input class="po-md-7" p-placeholder="Pesquise pelo código ou disciplina"
+                p-icon="ph ph-magnifying-glass">
+
+            </po-input>
+        </div>
+
+        <div class="po-mt-2 po-ml-1">
+            <po-table [p-columns]="colunasTabelaCadastroQuestao" [p-hide-columns-manager]="true" [p-height]="400"
+                [p-items]="itemsCadastroQuestao" [p-sort]="true" [p-actions]="acoesTabelaCadastroQuestao" [p-striped]="true"
+                p-container [p-draggable]="true">
+            </po-table>
+        </div>
+    </div>
+
+    <app-chatbot></app-chatbot>
+
+</po-page-default>
+
+<po-modal class="animate-slide-in" #modalNovaProva p-title="Nova questão" p-size="md" [p-hide-close]="true"
+    [p-primary-action]="confirmarNovaQuestao" [p-secondary-action]="closeModalNovaQuestao">
+
+    <po-divider p-label="Preencha as informações">
+    </po-divider>
+
+    <div class="animate-fade-in">
+        <app-form-gerar-questao></app-form-gerar-questao>
+    </div>
+</po-modal>
+
+<po-modal class="animate-slide-in" p-icon="ph ph-trash" #modalExcluirProva p-title="Deseja excluir a prova?" p-size="md"
+    [p-hide-close]="true" [p-primary-action]="confirmarExclusaoProva" [p-secondary-action]="closeModalExcluirProva">
+    <app-excluir *ngIf="provaSelecionada" [dadosProva]="provaSelecionada"></app-excluir>
+</po-modal>
