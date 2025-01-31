@@ -1,4 +1,4 @@
-<app-toolbar [title]="'Prova - ' + formData.nomeProva"></app-toolbar>
+<app-toolbar [title]="'Prova - ' + formData.nomeProva + ' Tema: ' + formData.temaProva"></app-toolbar>
 <po-page-default>
 
   <div *ngIf="!isConsultaIAEmAndamento">
@@ -9,23 +9,15 @@
         nomeProva: formData.nomeProva,
         formatoProva: formData.formatoProva,
         notaMaximaProva: formData.notaMaximaProva,
-        turmaProva: formData.turmaProva,
         quantidadeQuestoes: formData.quantidadeQuestoes,
-        disciplina: formData.disciplina,
-        tema: formData.temaProva
       }]">
         <ng-template p-list-view-content-template let-item>
 
           <div class="po-row">
-
-            <po-info class="po-md-4" p-label="Nome da Prova" [p-value]="item.nomeProva"></po-info>
-            <po-info class="po-md-4" p-label="Formato da Prova" [p-value]="item.formatoProva"></po-info>
-            <po-info class="po-md-4" p-label="Nota Máxima" [p-value]="item.notaMaximaProva"></po-info>
-            <po-info class="po-md-4" p-label="Turma" [p-value]="item.turmaProva"></po-info>
-            <po-info class="po-md-4" p-label="Quantidade de Questões" [p-value]="item.quantidadeQuestoes"></po-info>
-            <po-info class="po-md-4" p-label="Disciplina" [p-value]="item.disciplina"></po-info>
-            <po-info class="po-md-12" p-label="Tema" [p-value]="item.tema"></po-info>
-
+            <po-info class="po-md-3" p-label="Nome da Prova" [p-value]="item.nomeProva"></po-info>
+            <po-info class="po-md-3" p-label="Formato da Prova" [p-value]="item.formatoProva"></po-info>
+            <po-info class="po-md-3" p-label="Nota Máxima" [p-value]="item.notaMaximaProva"></po-info>
+            <po-info class="po-md-3" p-label="Quantidade de Questões" [p-value]="item.quantidadeQuestoes"></po-info>
           </div>
           
         </ng-template>

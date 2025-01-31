@@ -5,17 +5,17 @@ import { InformacoesProvaService } from 'src/app/services/informacoesProva.servi
 @Injectable({
   providedIn: 'root'
 })
-export class FormGerarProvaManualService {
+export class FormGerarProvaDinamicaService {
+
+  constructor(
+    private informacoesProvaService: InformacoesProvaService
+  ) { }
 
   private formDataSubject = new BehaviorSubject<any>(null);
   formData$ = this.formDataSubject.asObservable();
 
   private formValidSubject = new BehaviorSubject<boolean>(false);
   formValid$ = this.formValidSubject.asObservable();
-
-  constructor(
-    private informacoesProvaService: InformacoesProvaService
-  ) {}
 
   setFormData(data: any): void {
     const currentData = this.formDataSubject.value;

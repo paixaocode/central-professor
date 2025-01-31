@@ -1,15 +1,17 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { PoMenuItem } from '@po-ui/ng-components';
+import { InformationUserService } from 'src/app/services/informationUser.service';
 
 @Component({
   selector: 'app-menu',
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.css']
 })
-export class MenuComponent {
+export class MenuComponent implements OnInit {
   menus: Array<PoMenuItem> = [];
+  userName: string = '';
 
-  constructor() {}
+  constructor(private userService: InformationUserService) {}
 
   ngOnInit(): void {
     this.menus = [
@@ -18,5 +20,14 @@ export class MenuComponent {
       { label: 'Mestre em Ação', link: "/mestre-acao", shortLabel: "Mestre", icon: "ph ph-chalkboard-teacher" },
       { label: 'Sair', link: '/login', shortLabel: 'Sair', icon: 'ph ph-sign-out' },
     ];
+
+    const userInfo = this.userService.getUserInfo();
+    if (userInfo && userInfo.name) {
+      this.userName = this.capitalizeName(userInfo.name);
+    }
+  }
+
+  capitalizeName(name: string): string {
+    return name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
   }
 }

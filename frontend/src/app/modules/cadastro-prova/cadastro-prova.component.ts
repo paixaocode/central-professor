@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { FormGerarProvaManualService } from './form-gerar-prova-manual/form-gerar-prova-manual.service';
 import { FormGerarProvaIaService } from './form-gerar-prova-ia/form-gerar-prova-ia.service';
 import { PoNotificationService } from '@po-ui/ng-components';
+import { FormGerarProvaDinamicaService } from './form-gerar-prova-dinamica/form-gerar-prova-dincamica.service';
 
 @Component({
   selector: 'app-cadastro-prova',
@@ -81,11 +82,19 @@ export class CadastroProvaComponent {
 
   isFormValid: boolean = false;
 
+  public tipoGeracaoProva: string = 'manual';
+  public opcoesTipoGeracao: Array<{ label: string; value: string }> = [
+    { label: 'Manulmente', value: 'manual' },
+    { label: 'Através de IA', value: 'ia' },
+    { label: 'Dinâmica', value: 'dinamica' }
+  ];
+
   constructor(
     private cadastroProvaService: CadastroProvaService,
     private route: Router,
     private formProvaManualService: FormGerarProvaManualService,
     private formProvaIaService: FormGerarProvaIaService,
+    private formProvaDinamicaService: FormGerarProvaDinamicaService,
     private poNotification: PoNotificationService
   ) { }
 
@@ -99,6 +108,12 @@ export class CadastroProvaComponent {
       this.isFormIAValid = isValid;
       this.atualizarEstadoBotaoLoadingModal();
     });
+
+    this.formProvaDinamicaService.formValid$.subscribe(isValid => {
+      this.isFormIAValid = isValid;
+      this.atualizarEstadoBotaoLoadingModal();
+    });
+
 
     this.init();
     this.mockDados();
@@ -138,8 +153,14 @@ export class CadastroProvaComponent {
     this.modalNovaProva.close();
   }
 
-  private _closeModalExcluirProva(){
+  private _closeModalExcluirProva() {
     this.modalExcluirProva.close();
+  }
+
+  onChangeTipoGeracao(event: any): void {
+    this.tipoGeracaoProva = event;
+    this.isGerarProvaIA = event === 'ia';
+    this.atualizarEstadoBotaoLoadingModal();
   }
 
 
@@ -149,13 +170,23 @@ export class CadastroProvaComponent {
   }
 
   private atualizarEstadoBotaoLoadingModal(): void {
-    const isFormValid = this.isGerarProvaIA ? this.isFormIAValid : this.isFormManualValid;
+    let isFormValid = false;
+  
+    if (this.tipoGeracaoProva === 'ia') {
+      isFormValid = this.isFormIAValid;
+    } else if (this.tipoGeracaoProva === 'manual') {
+      isFormValid = this.isFormManualValid;
+    } else if (this.tipoGeracaoProva === 'dinamica') {
+      isFormValid = this.isFormIAValid;
+    }
+  
     this.confirmarNovaProva.disabled = !isFormValid;
   }
 
   private resetarFormularios(): void {
     this.formProvaManualService.resetFormData();
     this.formProvaIaService.resetFormData();
+    this.formProvaDinamicaService.resetFormData();
   }
 
   private onVisualizarProva(prova: any) {
@@ -178,8 +209,10 @@ export class CadastroProvaComponent {
   private processCriarNovaProva() {
     let formData;
 
-    if (this.isGerarProvaIA) {
+    if (this.tipoGeracaoProva == 'ia') {
       formData = this.formProvaIaService.getFormData();
+    } else if (this.tipoGeracaoProva == 'dinamica') {
+      formData = this.formProvaDinamicaService.getFormData();
     } else {
       formData = this.formProvaManualService.getFormData();
     }
@@ -188,7 +221,8 @@ export class CadastroProvaComponent {
       this.route.navigate(['/cadastro-prova/incluir'], {
         state: {
           formData: formData,
-          isGerarProvaIA: this.isGerarProvaIA
+          isGerarProvaIA: this.isGerarProvaIA,
+          tipoGeracaoProva: this.tipoGeracaoProva
         }
       });
     } else {

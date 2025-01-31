@@ -1,7 +1,14 @@
-<div *ngIf="isGerarProvaIA; else manualForm">
+<div *ngIf="tipoGeracaoProva === 'ia'; else checkTipoGeracao">
     <app-form-ia [formData]="formData" [isReadonly]="isVisualizar"></app-form-ia>
-</div>
-
-<ng-template #manualForm>
+  </div>
+  
+  <ng-template #checkTipoGeracao>
+    <div *ngIf="tipoGeracaoProva === 'dinamica'; else manualForm">
+      <app-form-dinamica [formData]="formData" [isReadonly]="isVisualizar"></app-form-dinamica>
+    </div>
+  </ng-template>
+  
+  <ng-template #manualForm>
     <app-form-manual [formData]="formData" [isReadonly]="isVisualizar" readonlyData></app-form-manual>
-</ng-template>
+  </ng-template>
+  
