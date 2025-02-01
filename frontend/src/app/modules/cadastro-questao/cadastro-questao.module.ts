@@ -8,6 +8,7 @@ import { ExcluirComponent } from './excluir/excluir.component';
 import { PoModule } from '@po-ui/ng-components';
 import { CadastroQuestaoRoutingModule } from './cadastro-questao.routing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ToolbarModule } from '../toolbar/toolbar.module';
 
 
 
@@ -24,6 +25,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     CadastroQuestaoRoutingModule,
     FormsModule,
     ReactiveFormsModule,
+    ToolbarModule,
   ]
 })
 export class CadastroQuestaoModule { }
