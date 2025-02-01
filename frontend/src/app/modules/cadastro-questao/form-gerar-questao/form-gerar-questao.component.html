@@ -1,1 +1,29 @@
-<p>form-gerar-questao works!</p>
+<form 
+  [formGroup]="form" 
+  (ngSubmit)="submitQuestionForm()">
+
+  <po-select class="po-md-6"  formControlName="isPublic"      p-label="Formato" [p-options]="formatosBool">
+  </po-select>
+
+  <po-textarea class="po-md-12" name="statement" formControlName="statement" p-label="Questão" [p-rows]="3" [p-required]="true">
+  </po-textarea>
+
+  <ng-container formArrayName="alternatives">
+    <ng-container 
+      *ngFor="let alternative of getAlternativesControls().controls; let i = index"
+      [formGroupName]="i"]>
+      <po-input  class="po-md-6" [p-upper-case]="true" formControlName="text" p-label="Alternativa {{ i + 1}}" id="text{{ i }}"></po-input>
+    </ng-container>
+  </ng-container> 
+
+  <po-select class="po-md-6" formControlName="correctAnswer"     p-label="Alternativa correta" [p-options]="formatosCorrectAnswer">
+  </po-select>
+  
+  <po-input  class="po-md-12" [p-upper-case]="true" formControlName="topic" p-label="Tema"></po-input>
+
+  <po-select class="po-md-6"  formControlName="difficulty"      p-label="Nível de dificuldade" [p-options]="formatosLevel">
+  </po-select>
+
+  <po-select class="po-md-6"  formControlName="acessibility"      p-label="Acessibilidade" [p-options]="formatosBool">
+  </po-select>
+</form>

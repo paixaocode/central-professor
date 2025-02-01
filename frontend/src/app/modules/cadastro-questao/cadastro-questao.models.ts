@@ -3,19 +3,19 @@ export type CadastroQuestao = {
   isPublic: boolean
   alternatives: [string]
   correctAnswer: number
-  subjectId: Subject
+  subjectId: SubjectForm
   topic: string
   gradeId: Grade
   difficulty: string
   acessibility: boolean
 }
 
-type Grade = {
+export type Grade = {
   id: string
   name: string
 }
 
-type Subject = {
+export type SubjectForm = {
   name: string
   topics: [string]
 }
