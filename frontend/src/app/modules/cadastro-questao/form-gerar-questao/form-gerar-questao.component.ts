@@ -3,7 +3,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { FormGerarQuestaoService } from './form-gerar-questao.service';
 import { FormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { Grade, SubjectForm } from '../cadastro-questao.models';
+import { Grade, SubjectForm, SubjectObject } from '../cadastro-questao.models';
 
 type Select = {
   label: string;
@@ -75,10 +75,15 @@ export class FormGerarQuestaoComponent implements OnInit {
         takeUntilDestroyed(this.destroyRef)
       )
       .subscribe({
-        next: (subject: SubjectForm) => { 
-          this.formatosSubject.push({ label: subject.name, value: subject.id });
+        next: (subject: SubjectObject) => { 
+          const subjectList = subject.subjects;
+          subjectList.forEach((element: SubjectForm) => {
+            this.formatosSubject.push({ label: element.name, value: element._id });
+          });
         },
-        error: () => { }
+        error: () => {
+          this.formatosSubject.push({ label: 'Erro ao carregar! Por favor tente novamente mais tarde', value: 'Erro' });
+         }
       })
   }
 
@@ -89,7 +94,8 @@ export class FormGerarQuestaoComponent implements OnInit {
       )
       .subscribe({
         next: (grade: Grade) => {
-          this.formatosGrades.push({ label: grade.name, value: grade.id });
+          console.log(grade);
+          this.formatosGrades.push({ label: grade.name, value: grade._id });
          },
         error: () => { }
       })

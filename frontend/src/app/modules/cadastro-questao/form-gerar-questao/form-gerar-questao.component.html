@@ -8,11 +8,15 @@
   <po-select class="po-md-6"  formControlName="acessibility" p-label="Acessibilidade" [p-options]="formatosBool">
   </po-select>
 
-  <po-select class="po-md-6"  formControlName="subjectId" p-label="Matéria" [p-options]="formatosSubject">
-  </po-select>
+  <ng-container *ngIf="formatosSubject.length > 0">
+    <po-select class="po-md-6"  formControlName="subjectId" p-label="Matéria" [p-options]="formatosSubject">
+    </po-select>
+  </ng-container>
   
-  <po-select class="po-md-6"  formControlName="gradeId" p-label="Grade" [p-options]="formatosGrades">
-  </po-select>
+  <ng-container *ngIf="formatosGrades.length > 0">
+    <po-select class="po-md-6"  formControlName="gradeId" p-label="Grade" [p-options]="formatosGrades">
+    </po-select>
+  </ng-container>
 
   <po-input  class="po-md-12" [p-upper-case]="true" formControlName="topic" p-label="Tema"></po-input>
 

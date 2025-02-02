@@ -11,12 +11,27 @@ export type CadastroQuestao = {
 }
 
 export type Grade = {
-  id: string
+  _id: string
   name: string
+  default: boolean
 }
 
 export type SubjectForm = {
-  id: string
+  _id: string
   name: string
   topics: [string]
+  default: boolean
+}
+
+export type SubjectObject = {
+  page: number
+  subjects: [SubjectForm]
+  success: boolean
+  totalPages: number
+  totalQuestions: number
+}
+
+export type GradeObject = {
+  grades: [Grade]
+  success: boolean
 }
