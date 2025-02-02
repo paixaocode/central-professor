@@ -20,14 +20,14 @@ export class FormGerarQuestaoComponent implements OnInit {
   form: UntypedFormGroup = new UntypedFormGroup({});
 
   formatosBool = [
-    { label: 'Sim', value: 'sim' },
-    { label: 'Não', value: 'nao' }
+    { label: 'Sim', value: 'true' },
+    { label: 'Não', value: 'false' }
   ];
 
   formatosLevel = [
-    { label: 'Fácil', value: 'easy' },
+    { label: 'Fácil', value: 'Easy' },
     { label: 'Médio', value: 'Medium' },
-    { label: 'Difícil', value: 'hard' }
+    { label: 'Difícil', value: 'Hard' }
   ];
 
   formatosCorrectAnswer = [
