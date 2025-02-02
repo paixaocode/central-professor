@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 import { CadastroQuestao, Grade, SubjectForm } from '../cadastro-questao.models';
 
@@ -9,6 +9,12 @@ const API_URL = 'http://localhost:3000/api'
   providedIn: 'root'
 })
 export class FormGerarQuestaoService {
+
+  private formDataSubject = new BehaviorSubject<any>(null);
+  formData$ = this.formDataSubject.asObservable();
+
+  private formValidSubject = new BehaviorSubject<boolean>(false);
+  formValid$ = this.formValidSubject.asObservable();
 
   constructor( private http: HttpClient) { }
 
@@ -22,5 +28,14 @@ export class FormGerarQuestaoService {
 
   postQuestionForm(data: CadastroQuestao): Observable<CadastroQuestao> {
     return this.http.post<CadastroQuestao>(`${API_URL}/questions/create`, data);
+  }
+
+  getFormData(): any {
+    return this.formDataSubject.value;
+  }
+
+  resetFormData(): void {
+    this.formDataSubject.next(null);
+    this.formValidSubject.next(false);
   }
 }
