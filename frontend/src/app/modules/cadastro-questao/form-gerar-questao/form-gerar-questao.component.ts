@@ -3,7 +3,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { FormGerarQuestaoService } from './form-gerar-questao.service';
 import { FormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { Grade, SubjectForm, SubjectObject } from '../cadastro-questao.models';
+import { Grade, GradeObject, SubjectForm, SubjectObject } from '../cadastro-questao.models';
 
 type Select = {
   label: string;
@@ -93,11 +93,15 @@ export class FormGerarQuestaoComponent implements OnInit {
         takeUntilDestroyed(this.destroyRef)
       )
       .subscribe({
-        next: (grade: Grade) => {
-          console.log(grade);
-          this.formatosGrades.push({ label: grade.name, value: grade._id });
+        next: (gradeObj: GradeObject) => {
+          const gradeList = gradeObj.grades;
+          gradeList.forEach((element: Grade) => {
+            this.formatosGrades.push({ label: element.name, value: element._id });
+          });
          },
-        error: () => { }
+        error: () => { 
+          this.formatosGrades.push({ label: 'Erro ao carregar! Por favor tente novamente mais tarde', value: 'Erro' });
+        }
       })
   }
 
