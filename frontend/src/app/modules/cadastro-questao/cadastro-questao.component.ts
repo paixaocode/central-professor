@@ -4,7 +4,7 @@ import { PoModalAction, PoModalComponent, PoNotificationService, PoTableAction, 
 import { CadastroQuestaoService } from './cadastro-questao.service';
 import { FormGerarQuestaoService } from './form-gerar-questao/form-gerar-questao.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { QuestaoObj } from './cadastro-questao.models';
+import { CadastroQuestao, QuestaoObj } from './cadastro-questao.models';
 
 @Component({
   selector: 'app-cadastro-questao',
@@ -51,7 +51,7 @@ export class CadastroQuestaoComponent implements OnInit {
 
   ngOnInit(): void {
     this.init();
-    this.getTodasQuestoes()
+    this.getTodasQuestoes();
   }
 
   private init() {
@@ -82,10 +82,11 @@ export class CadastroQuestaoComponent implements OnInit {
     )
     .subscribe({
       next: (questoesObj: QuestaoObj) => {
-         
+         const questoesList = questoesObj.questions;
+         this.itemsCadastroQuestao = questoesList;
       },
-      error: () => {
-        
+      error: e => {
+        console.error(e);
       }
     })
   }
