@@ -16,6 +16,7 @@ export type Grade = {
 }
 
 export type SubjectForm = {
+  id: string
   name: string
   topics: [string]
 }

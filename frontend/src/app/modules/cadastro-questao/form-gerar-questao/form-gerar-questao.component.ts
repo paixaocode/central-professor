@@ -3,6 +3,12 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { FormGerarQuestaoService } from './form-gerar-questao.service';
 import { FormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { Grade, SubjectForm } from '../cadastro-questao.models';
+
+type Select = {
+  label: string;
+  value: any;
+}
 
 @Component({
   selector: 'app-form-gerar-questao',
@@ -30,6 +36,9 @@ export class FormGerarQuestaoComponent implements OnInit {
     { label: 'C', value: '2' },
     { label: 'D', value: '3' }
   ];
+
+  formatosSubject: Select[] = [];
+  formatosGrades: Select[] = [];
 
   constructor(
     private formService: FormGerarQuestaoService,
@@ -66,13 +75,24 @@ export class FormGerarQuestaoComponent implements OnInit {
         takeUntilDestroyed(this.destroyRef)
       )
       .subscribe({
-        next: () => { },
+        next: (subject: SubjectForm) => { 
+          this.formatosSubject.push({ label: subject.name, value: subject.id });
+        },
         error: () => { }
       })
   }
 
   private getGrades(): void {
-    this.formService.getGrades();
+    this.formService.getGrades()
+      .pipe(
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe({
+        next: (grade: Grade) => {
+          this.formatosGrades.push({ label: grade.name, value: grade.id });
+         },
+        error: () => { }
+      })
   }
 
   private buildForm(): void { 
