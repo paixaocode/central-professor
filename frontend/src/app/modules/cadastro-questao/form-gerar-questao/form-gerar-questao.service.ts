@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
-import { CadastroQuestao, GradeObject, SubjectObject } from '../cadastro-questao.models';
+import { CadastroQuestao, GradeObj, MateriaObj, } from '../cadastro-questao.models';
 import { environment } from 'src/environments/environment';
 
 const API_URL = environment.baseUrlBackEnd;
@@ -19,12 +19,12 @@ export class FormGerarQuestaoService {
 
   constructor( private http: HttpClient) { }
 
-  getSubjects(): Observable<SubjectObject> {
-    return this.http.get<SubjectObject>(`${API_URL}subjects/allSubjects`);
+  getSubjects(): Observable<MateriaObj> {
+    return this.http.get<MateriaObj>(`${API_URL}subjects/allSubjects`);
   }
 
-  getGrades(): Observable<GradeObject> {
-    return this.http.get<GradeObject>(`${API_URL}grades/allGrades`);
+  getGrades(): Observable<GradeObj> {
+    return this.http.get<GradeObj>(`${API_URL}grades/allGrades`);
   }
 
   postQuestionForm(data: CadastroQuestao): Observable<CadastroQuestao> {

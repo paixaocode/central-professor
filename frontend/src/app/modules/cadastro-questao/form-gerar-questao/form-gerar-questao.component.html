@@ -18,7 +18,7 @@
     </po-select>
   </ng-container>
 
-  <po-input  class="po-md-12" [p-upper-case]="true" formControlName="topic" p-label="Tema"></po-input>
+  <po-input  class="po-md-12" formControlName="topic" p-label="Tema"></po-input>
 
   <po-textarea class="po-md-12" name="statement" formControlName="statement" p-label="Digite a questão" [p-rows]="2" [p-required]="true">
   </po-textarea>
@@ -27,7 +27,7 @@
     <ng-container 
       *ngFor="let alternative of getAlternativesControls().controls; let i = index"
       [formGroupName]="i"]>
-      <po-input  class="po-md-6" [p-upper-case]="true" formControlName="text" p-label="Alternativa {{ i + 1}}" id="text{{ i }}"></po-input>
+      <po-input  class="po-md-6" formControlName="text" p-label="Alternativa {{ i + 1}}" id="text{{ i }}"></po-input>
     </ng-container>
   </ng-container> 
 
@@ -38,3 +38,13 @@
   </po-select>
 
 </form>
+
+<div class="animate-fade-in">
+  <div class="po-row po-pt-2 po-pb-2">
+
+    <po-button class="po-md-12" p-label="Salvar" p-icon="ph ph-floppy-disk" p-kind="primary"
+    (p-click)="submitQuestionForm()" [p-disabled]="form.invalid">
+    </po-button>
+
+  </div>
+</div>

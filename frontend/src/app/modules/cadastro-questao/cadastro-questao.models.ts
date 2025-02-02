@@ -3,7 +3,7 @@ export type CadastroQuestao = {
   isPublic: boolean
   alternatives: [string]
   correctAnswer: number
-  subjectId: SubjectForm
+  subjectId: MateriaForm
   topic: string
   gradeId: Grade
   difficulty: string
@@ -16,22 +16,30 @@ export type Grade = {
   default: boolean
 }
 
-export type SubjectForm = {
+export type MateriaForm = {
   _id: string
   name: string
   topics: [string]
   default: boolean
 }
 
-export type SubjectObject = {
+export type MateriaObj = {
   page: number
-  subjects: [SubjectForm]
+  subjects: [MateriaForm]
   success: boolean
   totalPages: number
   totalQuestions: number
 }
 
-export type GradeObject = {
+export type GradeObj = {
   grades: [Grade]
   success: boolean
+}
+
+export type QuestaoObj = {
+  page: number
+  questions: [CadastroQuestao]
+  success: boolean
+  totalPages: number
+  totalQuestions: number
 }

@@ -3,7 +3,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { FormGerarQuestaoService } from './form-gerar-questao.service';
 import { FormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { Grade, GradeObject, SubjectForm, SubjectObject } from '../cadastro-questao.models';
+import { Grade, GradeObj, MateriaForm, MateriaObj, } from '../cadastro-questao.models';
 
 type Select = {
   label: string;
@@ -21,7 +21,7 @@ export class FormGerarQuestaoComponent implements OnInit {
 
   formatosBool = [
     { label: 'Sim', value: 'sim' },
-    { label: 'Nã0', value: 'nao' }
+    { label: 'Não', value: 'nao' }
   ];
 
   formatosLevel = [
@@ -31,10 +31,10 @@ export class FormGerarQuestaoComponent implements OnInit {
   ];
 
   formatosCorrectAnswer = [
-    { label: 'A', value: '0' },
-    { label: 'B', value: '1' },
-    { label: 'C', value: '2' },
-    { label: 'D', value: '3' }
+    { label: '1', value: '0' },
+    { label: '2', value: '1' },
+    { label: '3', value: '2' },
+    { label: '4', value: '3' }
   ];
 
   formatosSubject: Select[] = [];
@@ -75,9 +75,9 @@ export class FormGerarQuestaoComponent implements OnInit {
         takeUntilDestroyed(this.destroyRef)
       )
       .subscribe({
-        next: (subject: SubjectObject) => { 
+        next: (subject: MateriaObj) => { 
           const subjectList = subject.subjects;
-          subjectList.forEach((element: SubjectForm) => {
+          subjectList.forEach((element: MateriaForm) => {
             this.formatosSubject.push({ label: element.name, value: element._id });
           });
         },
@@ -93,7 +93,7 @@ export class FormGerarQuestaoComponent implements OnInit {
         takeUntilDestroyed(this.destroyRef)
       )
       .subscribe({
-        next: (gradeObj: GradeObject) => {
+        next: (gradeObj: GradeObj) => {
           const gradeList = gradeObj.grades;
           gradeList.forEach((element: Grade) => {
             this.formatosGrades.push({ label: element.name, value: element._id });

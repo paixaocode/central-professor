@@ -1,8 +1,10 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, DestroyRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { PoModalAction, PoModalComponent, PoNotificationService, PoTableAction, PoTableColumn } from '@po-ui/ng-components';
 import { CadastroQuestaoService } from './cadastro-questao.service';
 import { FormGerarQuestaoService } from './form-gerar-questao/form-gerar-questao.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { QuestaoObj } from './cadastro-questao.models';
 
 @Component({
   selector: 'app-cadastro-questao',
@@ -43,11 +45,13 @@ export class CadastroQuestaoComponent implements OnInit {
     private cadastroQuestaoService: CadastroQuestaoService,
     private formGerarQuestaoService: FormGerarQuestaoService,
     private poNotification: PoNotificationService,
+    private destroyRef: DestroyRef,
     private route: Router,
   ) { }
 
   ngOnInit(): void {
     this.init();
+    this.getTodasQuestoes()
   }
 
   private init() {
@@ -70,6 +74,21 @@ export class CadastroQuestaoComponent implements OnInit {
     label: 'Cancelar',
     danger: true
   };
+
+  private getTodasQuestoes(): void {
+    this.cadastroQuestaoService.getQuestoesCadastradas(1)
+    .pipe(
+      takeUntilDestroyed(this.destroyRef)
+    )
+    .subscribe({
+      next: (questoesObj: QuestaoObj) => {
+         
+      },
+      error: () => {
+        
+      }
+    })
+  }
 
   private _closeModalCriarNovaQuestao() {
     this.modalNovaQuestao.close();
