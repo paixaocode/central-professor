@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
@@ -7,8 +7,11 @@ import { environment } from '../../../environments/environment';
   providedIn: 'root',
 })
 export class LoginService {
-  private backEnd = `${environment.baseUrlBackEnd}`;
+  private backEnd = `${environment.baseUrlBackEnd}users/login`;
 
   constructor(private http: HttpClient) {}
 
+  login(data: { email: string; password: string }): Observable<any> {
+    return this.http.post(this.backEnd, data);
+  }
 }

@@ -14,11 +14,11 @@
         p-required="true" [p-show-required]="true" p-clean>
     </po-datepicker>
 
-    <po-input class="po-md-4" p-label="CPF" p-type="text" p-mask="999.999.999-99" formControlName="cpf"
+    <po-input class="po-md-4" p-label="CPF" p-type="text" p-mask="999.999.999-99" p-mask-format-model="true" formControlName="cpf"
         p-required="true" [p-show-required]="true" p-clean>
     </po-input>
 
-    <po-input class="po-md-4" p-label="Telefone" p-type="text" p-mask="(99) 99999-9999" formControlName="telefone"
+    <po-input class="po-md-4" p-label="Telefone" p-type="text" p-mask="(99) 99999-9999" p-mask-format-model="true"  formControlName="telefone"
         p-required="true" [p-show-required]="true" p-clean>
     </po-input>
 
@@ -29,7 +29,6 @@
     <po-select class="po-md-4" p-label="Gênero" [p-options]="[
     { label: 'Masculino', value: '1'},
     { label: 'Feminino', value: '2' },
-    { label: 'Outros', value: '3' },
     ]" formControlName="genero" p-required="true" [p-show-required]="true" p-clean>
     </po-select>
 

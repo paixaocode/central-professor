@@ -1,20 +1,32 @@
-import { Component, Input, OnInit, OnChanges } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
+import { Component, Input, OnChanges, OnInit, ViewChild } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { PoModalAction, PoModalComponent } from '@po-ui/ng-components';
 
 @Component({
-  selector: 'app-form-manual',
-  templateUrl: './form-manual.component.html',
-  styleUrls: ['./form-manual.component.css']
+  selector: 'app-form-dinamica',
+  templateUrl: './form-dinamica.component.html',
+  styleUrls: ['./form-dinamica.component.css']
 })
-export class FormManualComponent implements OnInit, OnChanges {
+export class FormDinamicaComponent implements OnInit, OnChanges {
+
+  @ViewChild('modalEscolherQuestao', { static: false }) modalEscolherQuestao!: PoModalComponent;
+
   @Input() formData: any = {};
   @Input() isReadonly: boolean = false;
   @Input() readonlyData: any = {};
-  @Input() disciplinas: { value: string; label: string }[] = [];
   form: FormGroup = new FormGroup({});
 
   constructor(private fb: FormBuilder, private route: Router) {}
+
+  addQuestaoModal: PoModalAction = {
+      action: () => {
+        this.adicionarQuestaoModal();
+      },
+      label: 'Confirmar',
+      loading: false,
+      disabled: false
+    };
 
   ngOnInit() {
     this.createForm();
@@ -27,13 +39,6 @@ export class FormManualComponent implements OnInit, OnChanges {
         respostas: { A: '', B: '', C: '', D: '' },
         respostaCorreta: ''
       }));
-    }
-
-    if (this.formData?.disciplina && this.disciplinas.length > 0) {
-      const disciplina = this.disciplinas.find(d => d.value === this.formData.disciplina);
-      if (disciplina) {
-        this.formData.disciplina = disciplina.label;
-      }
     }
   }
 
@@ -75,6 +80,32 @@ export class FormManualComponent implements OnInit, OnChanges {
     question.respostas[selectedOption] = 'x';
   }
 
+  abrirModalAdicionarQuestao() {
+    this.modalEscolherQuestao.open();
+  }
+  
+  adicionarQuestaoModal() {
+    const novaQuestao = this.fb.group({
+      texto: [{ value: '', disabled: this.isReadonly }, Validators.required],
+      A: [{ value: '', disabled: this.isReadonly }, Validators.required],
+      B: [{ value: '', disabled: this.isReadonly }, Validators.required],
+      C: [{ value: '', disabled: this.isReadonly }, Validators.required],
+      D: [{ value: '', disabled: this.isReadonly }, Validators.required],
+      respostaCorreta: [{ value: '', disabled: this.isReadonly }, Validators.required],
+    });
+    this.questoes.push(novaQuestao);
+    this.modalEscolherQuestao.close();
+  }
+  
+
+  removerQuestao(index: number) {
+    this.questoes.removeAt(index);
+  }
+
+  onFocusInput(index: number): void {
+    this.modalEscolherQuestao.open();
+  }
+  
   getIcon(index: number, option: string): string {
     const respostaCorreta = this.questoes.at(index).get('respostaCorreta')?.value;
 
@@ -87,15 +118,13 @@ export class FormManualComponent implements OnInit, OnChanges {
 
   onSubmit() {
     if (this.isReadonly) return;
-    const disciplinaSelecionada = this.disciplinas.find(d => d.label === this.formData.disciplina);
-    const disciplinaId = disciplinaSelecionada ? disciplinaSelecionada.value : this.formData.disciplina;
-  
+
     const prova = {
       nomeProva: this.formData.nomeProva,
       formatoProva: this.formData.formatoProva,
       notaMaximaProva: this.formData.notaMaximaProva,
       turmaProva: this.formData.turmaProva,
-      disciplina: disciplinaId,
+      disciplina: this.formData.disciplina,
       quantidadeQuestoes: this.formData.quantidadeQuestoes,
       questoes: this.form.value.questoes.map((questao: any, index: number) => ({
         texto: questao.texto,
@@ -110,5 +139,4 @@ export class FormManualComponent implements OnInit, OnChanges {
     };
     console.log('prova', prova);
   }
-  
 }

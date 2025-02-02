@@ -21,14 +21,7 @@ export class FormGerarProvaIaComponent implements OnInit {
     { label: 'Difícil', value: 'dificil' }
   ];
 
-  disciplinaOptions = [
-    { label: 'Matemática', value: 'matematica' },
-    { label: 'Física', value: 'fisica' },
-    { label: 'Química', value: 'quimica' },
-    { label: 'História', value: 'historia' },
-    { label: 'Geografia', value: 'geografia' },
-    { label: 'Português', value: 'portugues' }
-  ];
+  disciplinas: { value: string; label: string }[] = [];
 
   quantidadeQuestoes = [
     { label: '1', value: 1 },
@@ -41,14 +34,7 @@ export class FormGerarProvaIaComponent implements OnInit {
     { label: '20', value: 20 }
   ];
 
-  turmas = [
-    { label: '1º Ano A', value: '1A' },
-    { label: '1º Ano B', value: '1B' },
-    { label: '2º Ano A', value: '2A' },
-    { label: '2º Ano B', value: '2B' },
-    { label: '3º Ano A', value: '3A' },
-    { label: '3º Ano B', value: '3B' }
-  ];
+  turmas: { value: string; label: string }[] = [];
 
   notasMaximas = [
     { label: '0', value: 0 },
@@ -97,6 +83,13 @@ export class FormGerarProvaIaComponent implements OnInit {
         this.formGerarProvaIA.reset();
       }
     });
+
+    this.formService.getDisciplinas().subscribe(data => {
+      this.disciplinas = data;
+    });
+
+    this.formService.getGrades().subscribe(data => {
+      this.turmas = data;
+    });
   }
-  
 }

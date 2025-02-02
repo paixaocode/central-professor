@@ -1,5 +1,6 @@
 import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { InformacoesProvaService } from 'src/app/services/informacoesProva.service';
 
 interface FormDataState {
   formData: any;
@@ -12,19 +13,22 @@ interface FormDataState {
   styleUrls: ['./incluir.component.css']
 })
 export class IncluirComponent implements OnInit {
-  
+
   public formData: any;
   public isGerarProvaIA: boolean = false;
-
   public isVisualizar: boolean = false;
-
-  constructor(private location: Location) { }
+  public tipoGeracaoProva: string = '';
+  
+  constructor(
+    private location: Location,
+  ) { }
 
   ngOnInit() {
-    const navigation = this.location.getState() as FormDataState;
+    const navigation = this.location.getState() as FormDataState & { tipoGeracaoProva: string };
     if (navigation) {
       this.formData = navigation.formData;
       this.isGerarProvaIA = navigation.isGerarProvaIA;
+      this.tipoGeracaoProva = navigation.tipoGeracaoProva || '';
     }
   }
 }

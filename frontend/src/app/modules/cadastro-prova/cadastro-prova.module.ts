@@ -14,10 +14,20 @@ import { FormIaComponent } from './form-gerar-prova-ia/form-ia/form-ia.component
 import { MatRadioModule } from '@angular/material/radio';
 import { ExcluirComponent } from './excluir/excluir.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { FormGerarProvaDinamicaComponent } from './form-gerar-prova-dinamica/form-gerar-prova-dinamica.component';
+import { FormDinamicaComponent } from './form-gerar-prova-dinamica/form-dinamica/form-dinamica.component';
 
 
 @NgModule({
-  declarations: [CadastroProvaComponent, FormGerarProvaIaComponent, FormGerarProvaManualComponent, IncluirComponent, FormManualComponent, FormIaComponent, ExcluirComponent],
+  declarations: [CadastroProvaComponent, 
+    FormGerarProvaIaComponent, 
+    FormGerarProvaManualComponent, 
+    IncluirComponent, 
+    FormManualComponent, 
+    FormIaComponent, 
+    ExcluirComponent, 
+    FormGerarProvaDinamicaComponent, 
+    FormDinamicaComponent],
   imports: [
     CommonModule,
     PoModule,

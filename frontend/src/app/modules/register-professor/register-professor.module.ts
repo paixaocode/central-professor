@@ -4,6 +4,7 @@ import { RegisterProfessorComponent } from './register-professor.component';
 import { RegisterProfessorRoutingModule } from './register-professor.routing';
 import { PoModule } from '@po-ui/ng-components';
 import { ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [RegisterProfessorComponent],
@@ -11,7 +12,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     CommonModule,
     RegisterProfessorRoutingModule,
     PoModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    HttpClientModule
   ],
   exports: [RegisterProfessorComponent]
 })

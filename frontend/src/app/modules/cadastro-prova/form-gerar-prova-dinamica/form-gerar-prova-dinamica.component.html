@@ -1,0 +1,15 @@
+<form [formGroup]="formGerarProvaDinamica" *ngIf="formGerarProvaDinamica">
+  <po-input class="po-md-12" [p-upper-case]="true" formControlName="nomeProva" p-label="Nome da prova"></po-input>
+
+  <po-select class="po-md-6" formControlName="formatoProva" p-label="Formato" [p-options]="formatos">
+  </po-select>
+
+  <po-select class="po-md-6" formControlName="notaMaximaProva" p-label="Nota máxima" [p-options]="notasMaximas">
+  </po-select>
+
+  <po-select class="po-md-12" formControlName="disciplina" p-label="Disciplina" [p-options]="disciplinas">
+  </po-select>
+
+  <po-select class="po-md-12" formControlName="turmaProva" p-label="Turma" [p-options]="turmas">
+  </po-select>
+</form>

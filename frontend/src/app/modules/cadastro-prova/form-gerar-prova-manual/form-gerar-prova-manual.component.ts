@@ -12,8 +12,8 @@ export class FormGerarProvaManualComponent implements OnInit {
   formGerarProvaManual!: FormGroup;
 
   formatos = [
-    { label: 'Online', value: 'online' },
-    { label: 'Presencial', value: 'presencial' }
+    { label: 'Online', value: 'Online' },
+    { label: 'Presencial', value: 'Presencial' }
   ];
 
   notasMaximas = [
@@ -30,14 +30,7 @@ export class FormGerarProvaManualComponent implements OnInit {
     { label: '10', value: 10 }
   ];
 
-  turmas = [
-    { label: '1º Ano A', value: '1A' },
-    { label: '1º Ano B', value: '1B' },
-    { label: '2º Ano A', value: '2A' },
-    { label: '2º Ano B', value: '2B' },
-    { label: '3º Ano A', value: '3A' },
-    { label: '3º Ano B', value: '3B' }
-  ];
+  turmas: { value: string; label: string }[] = [];
 
   quantidadeQuestoes = [
     { label: '1', value: 1 },
@@ -50,14 +43,7 @@ export class FormGerarProvaManualComponent implements OnInit {
     { label: '20', value: 20 }
   ];
 
-  disciplinas = [
-    { label: 'Português', value: 'portugues' },
-    { label: 'Matemática', value: 'matematica' },
-    { label: 'Física', value: 'fisica' },
-    { label: 'História', value: 'historia' },
-    { label: 'Geografia', value: 'geografia' },
-    { label: 'Química', value: 'quimica' }
-  ];
+  disciplinas: { value: string; label: string }[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -89,6 +75,14 @@ export class FormGerarProvaManualComponent implements OnInit {
       } else {
         this.formGerarProvaManual.reset();
       }
+    });
+
+    this.formService.getDisciplinas().subscribe(data => {
+      this.disciplinas = data;
+    });
+
+    this.formService.getGrades().subscribe(data => {
+      this.turmas = data;
     });
   }
 }

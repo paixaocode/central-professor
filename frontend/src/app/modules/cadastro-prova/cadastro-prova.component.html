@@ -29,12 +29,12 @@
 
 </po-page-default>
 
-<po-modal class="animate-slide-in" #modalNovaProva p-title="Nova prova" p-size="md" [p-hide-close]="true"
+<po-modal class="animate-slide-in" p-icon="ph ph-book-open-text" #modalNovaProva p-title="Nova prova" p-size="md" [p-hide-close]="true"
     [p-primary-action]="confirmarNovaProva" [p-secondary-action]="closeModalNovaProva">
 
-    <po-switch class="po-md-12" p-label="Como quer gerar a prova?" p-label-on="Gerar através de IA"
-        p-label-off="Gerar manualmente" (p-change)="switchGerarProva($event)" [(ngModel)]="isGerarProvaIA">
-    </po-switch>
+    <po-radio-group class="po-md-12" p-label="Como quer gerar a prova?" [(ngModel)]="tipoGeracaoProva" [p-options]="opcoesTipoGeracao"
+         (p-change)="onChangeTipoGeracao($event)" [p-columns]="3">
+    </po-radio-group>
 
     <po-divider p-label="Preencha as informações">
     </po-divider>
@@ -42,10 +42,14 @@
     <div *ngIf="isGerarProvaIA" class="animate-fade-in">
         <app-form-gerar-prova-ia></app-form-gerar-prova-ia>
     </div>
-
-    <div *ngIf="!isGerarProvaIA" class="animate-fade-in">
+    
+    <div *ngIf="!isGerarProvaIA && tipoGeracaoProva === 'manual'" class="animate-fade-in">
         <app-form-gerar-prova-manual></app-form-gerar-prova-manual>
     </div>
+    
+    <div *ngIf="!isGerarProvaIA && tipoGeracaoProva === 'dinamica'" class="animate-fade-in">
+        <app-form-gerar-prova-dinamica></app-form-gerar-prova-dinamica>
+    </div>    
 </po-modal>
 
 <po-modal class="animate-slide-in" p-icon="ph ph-trash" #modalExcluirProva p-title="Deseja excluir a prova?" p-size="md"
