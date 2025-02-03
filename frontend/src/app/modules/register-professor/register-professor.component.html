@@ -2,7 +2,7 @@
     p-subtitle="Preencha o formulário abaixo para se cadastrar" (p-save)="saveRegister()" (p-cancel)="cancelRegister()"
     [formGroup]="registerForm" [p-disable-submit]="!registerForm.valid">
 
-    <po-input class="po-md-4" p-label="Nome Completo" formControlName="nomeCompleto" p-required="true"
+    <po-input class="po-md-4" p-label="Nome" formControlName="nomeCompleto" p-required="true"
         [p-show-required]="true" p-clean>
     </po-input>
 

@@ -1,0 +1,50 @@
+<form 
+  [formGroup]="form" 
+  (ngSubmit)="submitQuestionForm()">
+
+  <po-select class="po-md-6"  formControlName="isPublic" p-label="Questão publica?" [p-options]="formatosBool">
+  </po-select>
+
+  <po-select class="po-md-6"  formControlName="acessibility" p-label="Acessibilidade" [p-options]="formatosBool">
+  </po-select>
+
+  <ng-container *ngIf="formatosSubject.length > 0">
+    <po-select class="po-md-6"  formControlName="subjectId" p-label="Matéria" [p-options]="formatosSubject">
+    </po-select>
+  </ng-container>
+  
+  <ng-container *ngIf="formatosGrades.length > 0">
+    <po-select class="po-md-6"  formControlName="gradeId" p-label="Grade" [p-options]="formatosGrades">
+    </po-select>
+  </ng-container>
+
+  <po-input  class="po-md-12" formControlName="topic" p-label="Tema"></po-input>
+
+  <po-textarea class="po-md-12" name="statement" formControlName="statement" p-label="Digite a questão" [p-rows]="2" [p-required]="true">
+  </po-textarea>
+
+  <ng-container formArrayName="alternatives">
+    <ng-container 
+      *ngFor="let alternative of getAlternativesControls().controls; let i = index"
+      [formGroupName]="i"]>
+      <po-input  class="po-md-6" formControlName="text" p-label="Alternativa {{ i + 1}}" id="text{{ i }}"></po-input>
+    </ng-container>
+  </ng-container> 
+
+  <po-select class="po-md-6" formControlName="correctAnswer"     p-label="Alternativa correta" [p-options]="formatosCorrectAnswer">
+  </po-select>
+
+  <po-select class="po-md-6"  formControlName="difficulty"      p-label="Nível de dificuldade" [p-options]="formatosLevel">
+  </po-select>
+
+</form>
+
+<div class="animate-fade-in">
+  <div class="po-row po-pt-2 po-pb-2">
+
+    <po-button class="po-md-12" p-label="Salvar" p-icon="ph ph-floppy-disk" p-kind="primary"
+    (p-click)="submitQuestionForm()" [p-disabled]="form.invalid">
+    </po-button>
+
+  </div>
+</div>
