@@ -29,6 +29,11 @@ export const routes: Routes = [
           import('./modules/cadastro-prova/cadastro-prova.module').then((m) => m.CadastroProvaModule),
       },
       {
+        path: 'cadastro-questao',
+        loadChildren: () =>
+          import('./modules/cadastro-questao/cadastro-questao.module').then((m) => m.CadastroQuestaoModule),
+      },
+      {
         path: 'mestre-acao',
         loadChildren: () =>
           import('./modules/mestre-acao/mestre-acao.module').then((m) => m.MestreAcaoModule),

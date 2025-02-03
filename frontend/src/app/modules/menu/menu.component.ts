@@ -16,6 +16,7 @@ export class MenuComponent implements OnInit {
   ngOnInit(): void {
     this.menus = [
       { label: 'Home', link: '/home', shortLabel: 'Home', icon: 'ph ph-house-line' },
+      { label: 'Cadastro de Questões', link: '/cadastro-questao', shortLabel: 'Cad. Questão', icon: 'ph ph-list-plus' },
       { label: 'Cadastro de Provas', link: '/cadastro-prova', shortLabel: 'Cad. Prova', icon: 'ph ph-clipboard-text' },
       { label: 'Mestre em Ação', link: "/mestre-acao", shortLabel: "Mestre", icon: "ph ph-chalkboard-teacher" },
       { label: 'Sair', link: '/login', shortLabel: 'Sair', icon: 'ph ph-sign-out' },
