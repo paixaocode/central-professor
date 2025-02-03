@@ -1,0 +1,25 @@
+<app-toolbar [title]="'Meu perfil'"></app-toolbar>
+
+<po-page-default>
+  <div class="animate-fade-in">
+    <div class="po-md-12 po-mb-3">
+      <po-avatar class="img-empty" style="display: block; margin: 0 auto;" p-size="md" [p-src]="avatar"></po-avatar>
+    </div>
+
+    <div class="po-mt-1 po-md-12 po-lg-8 po-xl-8 po-offset-lg-2 po-offset-xl-2">
+      <form [formGroup]="perfilForm">
+        <po-input p-label="Nome" p-readonly="true" formControlName="name"></po-input>
+        <po-input p-label="Sobrenome" p-readonly="true" formControlName="lastName"></po-input>
+        <po-input p-label="Telefone" p-readonly="true" formControlName="phone"></po-input>
+        <po-input p-label="E-mail" p-readonly="true" formControlName="email"></po-input>
+        <po-input p-label="Cargo" p-readonly="true" formControlName="role"></po-input>
+ 
+        <!-- <input type="file" (change)="onFileChange($event)" /> -->
+      </form>
+    </div>
+  </div>
+
+  <div class="po-row" [style.height.vh]="15"></div>
+</po-page-default>
+
+<app-chatbot></app-chatbot>

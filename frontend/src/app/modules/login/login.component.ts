@@ -41,6 +41,8 @@ export class LoginComponent {
       password: password,
     };
   
+    localStorage.clear();
+  
     this.loginService.login(data).subscribe({
       next: (response) => {
         const { user, token } = response;
@@ -68,5 +70,6 @@ export class LoginComponent {
       },
     });
   }
+  
   
 }

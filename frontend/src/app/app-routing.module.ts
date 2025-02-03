@@ -32,6 +32,11 @@ export const routes: Routes = [
         path: 'mestre-acao',
         loadChildren: () =>
           import('./modules/mestre-acao/mestre-acao.module').then((m) => m.MestreAcaoModule),
+      },
+      {
+        path: 'perfil',
+        loadChildren: () =>
+          import('./modules/perfil/perfil.module').then((m) => m.PerfilModule),
       }
     ],
   },
