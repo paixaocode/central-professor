@@ -19,7 +19,7 @@ export type Grade = {
 export type MateriaForm = {
   _id: string
   name: string
-  topics: [string]
+  topics: [Topic]
   default: boolean
 }
 
@@ -42,4 +42,9 @@ export type QuestaoObj = {
   success: boolean
   totalPages: number
   totalQuestions: number
+}
+
+export type Topic = {
+  _id: string
+  name: string
 }

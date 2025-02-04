@@ -3,12 +3,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { FormGerarQuestaoService } from './form-gerar-questao.service';
 import { FormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { Grade, GradeObj, MateriaForm, MateriaObj, } from '../cadastro-questao.models';
-
-type Select = {
-  label: string;
-  value: any;
-}
+import { Grade, GradeObj, MateriaForm, MateriaObj, Topic, } from '../cadastro-questao.models';
+import { PoSelectOption } from '@po-ui/ng-components';
 
 @Component({
   selector: 'app-form-gerar-questao',
@@ -37,8 +33,10 @@ export class FormGerarQuestaoComponent implements OnInit {
     { label: '4', value: '3' }
   ];
 
-  formatosSubject: Select[] = [];
-  formatosGrades: Select[] = [];
+  formatosSubject: Array<PoSelectOption> = [];
+  formatosGrades: Array<PoSelectOption> = [];
+  formatosTopics: Array<PoSelectOption> = [];
+  subjectList: MateriaForm[] = [];
 
   constructor(
     private formService: FormGerarQuestaoService,
@@ -47,9 +45,10 @@ export class FormGerarQuestaoComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.buildForm();
     this.getGrades();
     this.getSubjects();
-    this.buildForm();
+    this.onSubjectChange();
   }
 
   submitQuestionForm(): void {
@@ -61,10 +60,12 @@ export class FormGerarQuestaoComponent implements OnInit {
 
     this.formService.postQuestionForm(questionData)
       .pipe(
-        takeUntilDestroyed(this.destroyRef)
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe({
-        next: () => { },
+        next: () => {
+          this.formService.resetFormData();
+         },
         error: () => { }
       })
   }
@@ -76,10 +77,8 @@ export class FormGerarQuestaoComponent implements OnInit {
       )
       .subscribe({
         next: (subject: MateriaObj) => { 
-          const subjectList = subject.subjects;
-          subjectList.forEach((element: MateriaForm) => {
-            this.formatosSubject.push({ label: element.name, value: element._id });
-          });
+          this.subjectList = subject.subjects;
+          this.formatosSubject = this.subjectList.map((element: MateriaForm) => ({ label: element.name, value: element._id }));
         },
         error: () => {
           this.formatosSubject.push({ label: 'Erro ao carregar! Por favor tente novamente mais tarde', value: 'Erro' });
@@ -95,15 +94,40 @@ export class FormGerarQuestaoComponent implements OnInit {
       .subscribe({
         next: (gradeObj: GradeObj) => {
           const gradeList = gradeObj.grades;
-          gradeList.forEach((element: Grade) => {
-            this.formatosGrades.push({ label: element.name, value: element._id });
-          });
+          this.formatosGrades = gradeList.map((grade: Grade) => ({ label: grade.name, value: grade._id }));
          },
         error: () => { 
           this.formatosGrades.push({ label: 'Erro ao carregar! Por favor tente novamente mais tarde', value: 'Erro' });
         }
       })
   }
+
+  private onSubjectChange(): void {
+    this.form.get('subjectId')?.valueChanges.pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(subjectId =>{
+       this.updateTopics(subjectId)
+    })
+  }
+
+  updateTopics(subjectId:string): void {
+    // Filtra a matéria selecionada
+    const selectedSubject = this.subjectList.find(subject => subject._id === subjectId);
+
+    if (selectedSubject) {
+      this.formatosTopics = selectedSubject.topics.map((topic: Topic) => (
+        {
+          label: topic.name,
+          value: topic.name,
+      }
+    ));
+    } else {
+      this.formatosTopics = []; 
+    }
+    this.form.patchValue({
+        topicId: null
+      })
+   }
 
   private buildForm(): void { 
     this.form = this.fb.group({
