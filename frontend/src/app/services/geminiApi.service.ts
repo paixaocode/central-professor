@@ -125,4 +125,31 @@ export class GeminiApiService {
       return { error: "Não foi possível gerar a prova, verifique os dados informados.", message: generatedText };
     }
   }
+
+  enviarPergunta(pergunta: string): Observable<string> {
+    const url = `${this.urlApi}${this.geminiApiKey}`;
+  
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+  
+    const body = {
+      contents: [
+        {
+          parts: [
+            {
+              text: pergunta
+            }
+          ]
+        }
+      ]
+    };
+  
+    return this.http.post<any>(url, body, { headers }).pipe(
+      map((response: any) => {
+        return response?.candidates[0]?.content?.parts[0]?.text || 'Não foi possível obter uma resposta.';
+      })
+    );
+  }
+  
 }

@@ -8,6 +8,7 @@ import { PoModule } from '@po-ui/ng-components';
 import { CadastroQuestaoRoutingModule } from './cadastro-questao.routing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToolbarModule } from '../toolbar/toolbar.module';
+import { ChatbotModule } from '../chatbot/chatbot.module';
 
 
 
@@ -24,6 +25,7 @@ import { ToolbarModule } from '../toolbar/toolbar.module';
     FormsModule,
     ReactiveFormsModule,
     ToolbarModule,
+    ChatbotModule
   ]
 })
 export class CadastroQuestaoModule { }

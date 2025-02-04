@@ -1,22 +1,42 @@
 <i class="ph ph-chat-circle u-icon-message-circle" (click)="onChatbotClick()"></i>
 
-<po-page-slide #pageSlideChatBot p-title="Olá, Gabriel!" p-size="md" [p-click-out]="true">
+<po-page-slide #pageSlideChatBot [p-title]="'Olá, ' + userName" p-size="md" [p-click-out]="true">
     <section class="po-m-2 animate-fade-in">
-        <h3 class="po-font-subtitle po-mb-1 typing-effect">Como posso te ajudar hoje? 😄</h3>
-        <ul class="po-ml-2 animate-fade-in" *ngIf="contentVisible">
+        <h3 *ngIf="contentVisible && !firstMessageSent" class="po-font-subtitle po-mb-1 typing-effect">
+            Como posso te ajudar hoje? 😄
+        </h3>
+
+        <ul class="po-ml-2 animate-fade-in" *ngIf="contentVisible && !firstMessageSent">
             <li>Precisa de suporte na criação de provas ou atividades?</li>
             <li>Tem interesse em dicas para melhorar o desempenho da sua turma?</li>
             <li>Gostaria de conversar sobre boas práticas para engajar seus alunos?</li>
             <li>Aqui para te ajudar a otimizar seu tempo e atividades!</li>
         </ul>
+
+        <div class="chat-container" #chatContainer>
+            <div *ngFor="let msg of chatMessages" class="chat-message"
+                [ngClass]="{'user-message': msg.sender === 'user', 'bot-message': msg.sender === 'bot'}">
+                <span *ngIf="msg.sender === 'user'"></span>
+                <strong *ngIf="msg.sender === 'bot'">Chatbot: </strong>
+                <span>{{ msg.text }}</span>
+            </div>
+
+            <div *ngIf="botTyping" class="bot-typing">Chatbot está digitando...</div>
+        </div>
+
+
     </section>
 
     <po-divider></po-divider>
 
     <div class="po-input-container">
-        <po-input class="po-md-12" p-placeholder="Envie uma mensagem para nós!">
+        <po-input class="po-md-10" p-placeholder="Envie uma mensagem para nós!" [(ngModel)]="userInput"
+            (keydown.enter)="enviarMensagem()" p-readonly="{{ botTyping ? 'true' : 'false' }}">
         </po-input>
+
+        <po-button class="po-md-2 po-mt-1" [p-danger]="true" p-icon="ph-fill ph-trash" p-tooltip="Limpar histórico"
+            p-kind="primary" [p-disabled]="!firstMessageSent"  (p-click)="limparHistorico()">
+        </po-button>
     </div>
-    
 
 </po-page-slide>

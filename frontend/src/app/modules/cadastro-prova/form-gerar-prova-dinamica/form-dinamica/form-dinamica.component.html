@@ -68,11 +68,6 @@
                 p-readonly="isReadonly"></po-input>
             </mat-radio-group>
           </div>
-
-          <po-button [p-tooltip]="'Remover questão ' + (index + 1)" p-tooltip-position="right" class="po-mb-1 po-md-1"
-            *ngIf="!isReadonly" p-icon="ph ph-trash" [p-danger]="true" (p-click)="removerQuestao(index)">
-          </po-button>
-
         </div>
       </div>
     </div>
@@ -91,11 +86,18 @@
 </po-page-default>
 
 <po-modal
-    #modalEscolherQuestao
-    p-title="Escolha a questão"
-    p-size="md"
-    [p-hide-close]="true"
-    p-icon="ph ph-book-open-text"
-    [p-primary-action]="addQuestaoModal">
-    
+  #modalEscolherQuestao
+  p-title="Escolha a questão"
+  p-size="md"
+  [p-hide-close]="true"
+  p-icon="ph ph-book-open-text"
+  [p-primary-action]="fecharModal">
+  
+  <po-tree-view
+    [p-items]="treeItems"
+    (p-selected)="onQuestaoSelecionada($event)"
+    [p-selectable]="true"
+    (p-unselected)="onQuestaoDesmarcada($event)">
+  </po-tree-view>
+
 </po-modal>
