@@ -31,8 +31,8 @@ export class FormGerarQuestaoService {
     return this.http.post<CadastroQuestao>(`${API_URL}questions/create`, data);
   }
 
-  getFormData(): any {
-    return this.formDataSubject.value;
+  deleteQuestion(id: string): Observable<CadastroQuestao> {
+    return this.http.delete<CadastroQuestao>(`${API_URL}questions/${id}`);
   }
 
   resetFormData(): void {

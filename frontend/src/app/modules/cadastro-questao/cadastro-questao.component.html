@@ -38,8 +38,8 @@
         <app-form-gerar-questao></app-form-gerar-questao>
     </div>
 </po-modal>
-<!-- 
-<po-modal class="animate-slide-in" p-icon="ph ph-trash" #modalExcluirProva p-title="Deseja excluir a prova?" p-size="md"
-    [p-hide-close]="true" [p-primary-action]="confirmarExclusaoProva" [p-secondary-action]="closeModalExcluirProva">
-    <app-excluir *ngIf="provaSelecionada" [dadosProva]="provaSelecionada"></app-excluir>
-</po-modal> -->
+
+<po-modal class="animate-slide-in" p-icon="ph ph-trash" #modalExcluirQuestao p-title="Você deseja excluir essa questão?" p-size="md"
+    [p-hide-close]="true" [p-primary-action]="confirmarExclusaoQuestao" [p-secondary-action]="closeModalExcluirQuestao">
+    <p class="po-md-12 po-font-text-large">Atenção a ação não poderá ser revertida!</p>
+</po-modal>

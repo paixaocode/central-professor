@@ -5,6 +5,7 @@ import { CadastroQuestaoService } from './cadastro-questao.service';
 import { FormGerarQuestaoService } from './form-gerar-questao/form-gerar-questao.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CadastroQuestao, QuestaoObj } from './cadastro-questao.models';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-cadastro-questao',
@@ -16,7 +17,8 @@ export class CadastroQuestaoComponent implements OnInit {
   @ViewChild('modalNovaQuestao') modalNovaQuestao!: PoModalComponent;
   @ViewChild('modalExcluirQuestao', { static: false }) modalExcluirQuestao!: PoModalComponent;
 
-  public isFormValid: boolean = false;
+  questaoId: string | null = null;
+
   public colunasTabelaCadastroQuestao: Array<PoTableColumn> = [];
   public itemsCadastroQuestao: Array<any> = [];
   public acoesTabelaCadastroQuestao: Array<PoTableAction> = [
@@ -31,15 +33,6 @@ export class CadastroQuestaoComponent implements OnInit {
       label: 'Excluir',
     }
   ];
-
-  confirmarNovaQuestao: PoModalAction = {
-    action: () => {
-      this.processCriarNovaQuestao();
-    },
-    label: 'Confirmar',
-    loading: false,
-    disabled: true
-  };
 
   constructor(
     private cadastroQuestaoService: CadastroQuestaoService,
@@ -75,6 +68,24 @@ export class CadastroQuestaoComponent implements OnInit {
     danger: true
   };
 
+  closeModalExcluirQuestao: PoModalAction = {
+    action: () => {
+      this._closeModalExcluirQuestao();
+    },
+    label: 'Cancelar',
+    danger: true
+  };
+
+  confirmarExclusaoQuestao: PoModalAction = {
+    action: () => {
+      this.processExcluirQuestao();
+    },
+    label: 'Confirmar',
+    loading: false,
+    disabled: false,
+    danger: true
+  };
+
   private getTodasQuestoes(): void {
     this.cadastroQuestaoService.getQuestoesCadastradas(1)
     .pipe(
@@ -93,41 +104,48 @@ export class CadastroQuestaoComponent implements OnInit {
 
   private _closeModalCriarNovaQuestao() {
     this.modalNovaQuestao.close();
+    this.getTodasQuestoes();
+  }
+
+  private _closeModalExcluirQuestao() {
+    this.modalExcluirQuestao.close();
   }
 
   private onEditarQuestao(questao: any) {
+    // Melhoria Futura
     console.log('Editar Questão: ', questao);
   }
 
   private onExcluirQuestao(questao: any) {
+    this.questaoId = questao._id;
     this.modalExcluirQuestao.open();
+  }
+
+  private processExcluirQuestao() {
+    if(!this.questaoId) {
+      return
+    }
+    this.formGerarQuestaoService.deleteQuestion(this.questaoId)
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        finalize(() => {
+          this.questaoId = null;
+          this.closeModalExcluirQuestao.action();
+        })
+      )
+      .subscribe({
+        next: () => {
+          this.poNotification.success('Questão excluída com sucesso!');
+          this.getTodasQuestoes();
+         },
+        error: (err) => {
+          const errorMessage = err.error?.message || 'Erro ao deletar a questão. Por favor, tente novamente mais tarde.';
+          this.poNotification.error(errorMessage);
+         }
+      })
   }
 
   private resetarFormulario() {
     this.formGerarQuestaoService.resetFormData();
-  }
-
-  private atualizarEstadoBotaoLoadingModal(): void {
-    const isFormValid = this.isFormValid;
-    this.confirmarNovaQuestao.disabled = !isFormValid;
-  }
-
-  private processCriarNovaQuestao() {
-    let formData;
-
-    formData = this.formGerarQuestaoService.getFormData();
-    
-
-    if (formData) {
-      this.route.navigate(['/cadastro-questao/incluir'], {
-        state: {
-          formData: formData
-        }
-      });
-    } else {
-      this.poNotification.error('Houve um erro ao criar a questao. Por favor, tente novamente.');
-      this._closeModalCriarNovaQuestao();
-      this.atualizarEstadoBotaoLoadingModal();
-    }
   }
 }
