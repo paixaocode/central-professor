@@ -18,7 +18,10 @@
     </po-select>
   </ng-container>
 
-  <po-input  class="po-md-12" formControlName="topic" p-label="Tema"></po-input>
+  <ng-container *ngIf="formatosTopics.length > 0">
+    <po-select class="po-md-12" formControlName="topic" p-label="Tópico" [p-options]="formatosTopics">
+    </po-select>
+  </ng-container>
 
   <po-textarea class="po-md-12" name="statement" formControlName="statement" p-label="Digite a questão" [p-rows]="2" [p-required]="true">
   </po-textarea>
