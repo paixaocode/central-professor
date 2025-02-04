@@ -94,7 +94,6 @@ export class CadastroQuestaoComponent implements OnInit {
     .subscribe({
       next: (questoesObj: QuestaoObj) => {
          const questoesList = questoesObj.questions;
-         console.log(questoesList);
          this.itemsCadastroQuestao = questoesList;
       },
       error: e => {
