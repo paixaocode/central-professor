@@ -4,7 +4,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormGerarQuestaoService } from './form-gerar-questao.service';
 import { FormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Grade, GradeObj, MateriaForm, MateriaObj, Topic, } from '../cadastro-questao.models';
-import { PoSelectOption } from '@po-ui/ng-components';
+import { PoNotificationService, PoSelectOption } from '@po-ui/ng-components';
 
 @Component({
   selector: 'app-form-gerar-questao',
@@ -41,7 +41,8 @@ export class FormGerarQuestaoComponent implements OnInit {
   constructor(
     private formService: FormGerarQuestaoService,
     private destroyRef: DestroyRef,
-    private fb: UntypedFormBuilder
+    private fb: UntypedFormBuilder,
+    private poNotification: PoNotificationService,
   ) { }
 
   ngOnInit(): void {
@@ -64,9 +65,13 @@ export class FormGerarQuestaoComponent implements OnInit {
       )
       .subscribe({
         next: () => {
-          this.formService.resetFormData();
+          this.form.reset();
+          this.poNotification.success('Questão cadastrada com sucesso!');
          },
-        error: () => { }
+        error: (err) => {
+          const errorMessage = err.error?.message || 'Erro ao cadastrar a questão. Por favor, tente novamente mais tarde.';
+          this.poNotification.error(errorMessage);
+         }
       })
   }
 
