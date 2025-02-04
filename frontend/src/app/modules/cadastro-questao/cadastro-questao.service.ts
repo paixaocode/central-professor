@@ -18,14 +18,13 @@ export class CadastroQuestaoService {
 
   getColunasCadastroQuestao(): Array<PoTableColumn> {
     return [
-      { property: 'codigoQuestao', type: 'string', label: 'Código' },
       { property: 'statement', type: 'string', label: 'Questão' },
-      { property: 'subjectId', type: 'string', label: 'Matéria' },
+      { property: 'subject.name', type: 'string', label: 'Matéria' },
       { property: 'topic', type: 'string', label: 'Tópico' },
       { property: 'difficulty', type: 'string', label: 'Nível de dificuldade' },
-      { property: 'gradeId', type: 'string', label: 'Grade' },
+      { property: 'grade.name', type: 'string', label: 'Grade' },
       { property: 'isPublic', type: 'boolean', label: 'Publica' },
-      { property: 'acessibility', type: 'boolean', label: 'Acessibilidade' },
+      { property: 'accessibility', type: 'boolean', label: 'Acessibilidade' },
     ];
   }
 
