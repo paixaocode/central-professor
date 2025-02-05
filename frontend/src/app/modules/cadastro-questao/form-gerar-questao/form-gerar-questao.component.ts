@@ -59,6 +59,8 @@ export class FormGerarQuestaoComponent implements OnInit {
 
     const questionData = this.form.getRawValue();
 
+    console.log(questionData);
+
     this.formService.postQuestionForm(questionData)
       .pipe(
         takeUntilDestroyed(this.destroyRef),
@@ -123,7 +125,7 @@ export class FormGerarQuestaoComponent implements OnInit {
       this.formatosTopics = selectedSubject.topics.map((topic: Topic) => (
         {
           label: topic.name,
-          value: topic.name,
+          value: topic._id,
       }
     ));
     } else {

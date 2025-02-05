@@ -1,4 +1,4 @@
-import { Component, DestroyRef, OnInit, ViewChild } from '@angular/core';
+import { Component, DestroyRef, Input, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { PoModalAction, PoModalComponent, PoNotificationService, PoTableAction, PoTableColumn } from '@po-ui/ng-components';
 import { CadastroQuestaoService } from './cadastro-questao.service';
@@ -175,4 +175,6 @@ export class CadastroQuestaoComponent implements OnInit {
   private resetarFormulario() {
     this.formGerarQuestaoService.resetFormData();
   }
+
+
 }
