@@ -9,6 +9,8 @@ import { environment } from 'src/environments/environment';
 })
 export class FormGerarProvaDinamicaService {
   private baseUrl = environment.baseUrlBackEnd;
+  private apiUrl = `${environment.baseUrlBackEnd}tests/create`;
+
 
   private formDataSubject = new BehaviorSubject<any>(null);
   formData$ = this.formDataSubject.asObservable();
@@ -58,5 +60,13 @@ export class FormGerarProvaDinamicaService {
   getAllQuestions(): Observable<any> {
     const url = `${this.baseUrl}questions/allQuestions?page=1&limit=9999`;
     return this.http.get(url);
+  }
+
+  saveTest(testData: any): Observable<any> {
+    return this.http.post(this.apiUrl, testData);
+  }
+
+  getTopicsByDiscipline(disciplineId: string): Observable<{ value: string; label: string }[]> {
+    return this.informacoesProvaService.getTopicsByDiscipline(disciplineId);
   }
 }

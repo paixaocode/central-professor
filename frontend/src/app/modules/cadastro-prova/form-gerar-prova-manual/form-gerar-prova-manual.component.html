@@ -15,4 +15,6 @@
 
   <po-select class="po-md-12" formControlName="disciplina" p-label="Disciplina" [p-options]="disciplinas">
   </po-select>
+
+  <po-select *ngIf="topicos.length > 0" class="po-md-12" formControlName="topico" p-label="Tópico" [p-options]="topicos"></po-select>
 </form>

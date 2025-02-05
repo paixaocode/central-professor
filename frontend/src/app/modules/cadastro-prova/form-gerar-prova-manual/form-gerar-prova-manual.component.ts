@@ -44,6 +44,7 @@ export class FormGerarProvaManualComponent implements OnInit {
   ];
 
   disciplinas: { value: string; label: string }[] = [];
+  topicos: { value: string; label: string }[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -57,7 +58,8 @@ export class FormGerarProvaManualComponent implements OnInit {
       notaMaximaProva: ['', Validators.required],
       turmaProva: ['', Validators.required],
       quantidadeQuestoes: ['', Validators.required],
-      disciplina: ['', Validators.required]
+      disciplina: ['', Validators.required],
+      topico: ['', Validators.required]
     });
 
     this.formGerarProvaManual.valueChanges.subscribe(() => {
@@ -83,6 +85,14 @@ export class FormGerarProvaManualComponent implements OnInit {
 
     this.formService.getGrades().subscribe(data => {
       this.turmas = data;
+    });
+
+    this.formGerarProvaManual.get('disciplina')?.valueChanges.subscribe(disciplineId => {
+      if (disciplineId) {
+        this.formService.getTopicsByDiscipline(disciplineId).subscribe(topics => {
+          this.topicos = topics;
+        });
+      }
     });
   }
 }

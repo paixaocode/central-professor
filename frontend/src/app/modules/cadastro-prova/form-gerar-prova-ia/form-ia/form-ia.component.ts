@@ -2,6 +2,9 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { Router } from '@angular/router';
 import { GeminiApiService } from 'src/app/services/geminiApi.service';
+import { InformationUserService } from 'src/app/services/informationUser.service';
+import { PoNotificationService } from '@po-ui/ng-components';
+import { FormGerarProvaIaService } from '../form-gerar-prova-ia.service';
 
 @Component({
   selector: 'app-form-ia',
@@ -13,13 +16,19 @@ export class FormIaComponent implements OnInit {
   @Input() formData: any;
   @Input() isGerarProvaIA: boolean = false;
   @Input() isReadonly: boolean = false;
+  @Input() disciplinas: { value: string; label: string }[] = [];
   form: FormGroup = new FormGroup({});
 
   public isConsultaIAEmAndamento: boolean = true;
-  public textLoadingConsultaIA: string = 'Consultando IA...';
+  public textLoadingConsultaIA: string = 'Consultando IA';
   public provaGerada: any = null;
 
-  constructor(private fb: FormBuilder, private route: Router, private geminiApiService: GeminiApiService) { }
+  constructor(private fb: FormBuilder, 
+    private route: Router, 
+    private geminiApiService: GeminiApiService,
+    private informationUserService: InformationUserService,
+    private poNotification: PoNotificationService,
+    private formGerarProvaIA: FormGerarProvaIaService) { }
 
   ngOnInit() {
     this.fetchGeminiIA();
@@ -120,27 +129,66 @@ export class FormIaComponent implements OnInit {
 
   onSubmit() {
     if (this.isReadonly) return;
-
-    const prova = {
-      nomeProva: this.formData.nomeProva,
-      temaProva: this.formData.temaProva,
-      formatoProva: this.formData.formatoProva,
-      notaMaximaProva: this.formData.notaMaximaProva,
-      turmaProva: this.formData.turmaProva,
-      disciplina: this.formData.disciplina,
-      quantidadeQuestoes: this.formData.quantidadeQuestoes,
-      questoes: this.form.value.questoes.map((questao: any) => ({
-        texto: questao.texto,
-        respostas: {
-          A: questao.A,
-          B: questao.B,
-          C: questao.C,
-          D: questao.D,
+  
+    const userInfo = this.informationUserService.getUserInfo();
+    const userId = userInfo?.id;
+  
+    if (!userId) {
+      this.poNotification.error('Oops, não conseguimos salvar a prova!');
+      return;
+    }
+  
+    const disciplinaSelecionada = this.disciplinas.find((d) => d.label === this.formData.disciplina);
+    const disciplinaId = disciplinaSelecionada ? disciplinaSelecionada.value : this.formData.disciplina;
+  
+    this.formGerarProvaIA.getTopicsByDiscipline(disciplinaId).subscribe(topics => {
+      if (!topics || topics.length === 0) {
+        this.poNotification.error('Nenhum tópico encontrado para essa disciplina.');
+        return;
+      }
+  
+      const topicSelecionado = topics[0].value;
+  
+      const prova = {
+        testCode: this.formData.nomeProva,
+        testName: this.formData.nomeProva,
+        subjectId: disciplinaId,
+        testType: this.formData.formatoProva,
+        maxScore: this.formData.notaMaximaProva,
+        status: 'Aguardando',
+        gradeId: this.formData.turmaProva,
+        topic: topicSelecionado,
+        difficultyLevel: 'Mixed',
+        accessibility: false,
+        numberOfQuestions: this.form.value.questoes.length,
+        createdBy: userId,
+        questions: this.form.value.questoes.map((questao: any) => ({
+          statement: questao.texto,
+          alternatives: [
+            { text: questao.A },
+            { text: questao.B },
+            { text: questao.C },
+            { text: questao.D }
+          ],
+          correctAnswer: ['A', 'B', 'C', 'D'].indexOf(questao.respostaCorreta),
+          accessibility: false,
+          difficulty: 'Mixed',
+          topic: topicSelecionado,
+          isPublic: false
+        })),
+      };
+  
+      this.formGerarProvaIA.saveTest(prova).subscribe({
+        next: (response) => {
+          this.poNotification.success('Prova salva com sucesso!');
+          this.route.navigate(['/cadastro-prova']);
         },
-        respostaCorreta: questao.respostaCorreta,
-      }))
-    };
-
-    console.log('Prova gerada:', prova);
+        error: (error) => {
+          console.error('Erro ao salvar a prova:', error);
+          this.poNotification.error('Ocorreu um erro ao salvar a prova. Por favor, tente novamente mais tarde.');
+        }
+      });
+    });
   }
+  
 }

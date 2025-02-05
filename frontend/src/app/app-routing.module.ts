@@ -15,6 +15,11 @@ export const routes: Routes = [
       import('./modules/register-professor/register-professor.module').then((m) => m.RegisterProfessorModule),
   },
   {
+    path: 'ops',
+    loadChildren: () =>
+      import('./modules/ops/ops.module').then((m) => m.OpsModule),
+  },
+  {
     path: '',
     component: MenuComponent,
     children: [

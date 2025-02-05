@@ -3,6 +3,9 @@ import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '
 import { Router } from '@angular/router';
 import { PoModalAction, PoModalComponent, PoTreeViewItem } from '@po-ui/ng-components';
 import { FormGerarProvaDinamicaService } from '../form-gerar-prova-dincamica.service';
+import { InformationUserService } from 'src/app/services/informationUser.service';
+import { PoNotificationService } from '@po-ui/ng-components';
+
 
 interface QuestaoTreeViewItem extends PoTreeViewItem {
   _id: string;
@@ -23,12 +26,15 @@ export class FormDinamicaComponent implements OnInit, OnChanges {
   @Input() formData: any = {};
   @Input() isReadonly: boolean = false;
   @Input() readonlyData: any = {};
+  @Input() disciplinas: { value: string; label: string }[] = [];
   form: FormGroup = new FormGroup({});
   treeItems: PoTreeViewItem[] = [];
 
   constructor(private fb: FormBuilder, 
     private route: Router,
-    private formService: FormGerarProvaDinamicaService) {}
+    private formService: FormGerarProvaDinamicaService,
+    private informationUserService: InformationUserService,
+    private poNotification: PoNotificationService,) {}
 
     fecharModal: PoModalAction = {
       action: () => {
@@ -111,8 +117,6 @@ export class FormDinamicaComponent implements OnInit, OnChanges {
       });
     }
   }
-  
-  
   
   adicionarQuestaoNoForm(questao: QuestaoTreeViewItem) {
     const novaQuestao = this.fb.group({
@@ -203,7 +207,6 @@ export class FormDinamicaComponent implements OnInit, OnChanges {
     });
   }
   
-
   onClickVoltar() {
     this.route.navigate(['/cadastro-prova']);
   }
@@ -239,25 +242,66 @@ export class FormDinamicaComponent implements OnInit, OnChanges {
 
   onSubmit() {
     if (this.isReadonly) return;
-
-    const prova = {
-      nomeProva: this.formData.nomeProva,
-      formatoProva: this.formData.formatoProva,
-      notaMaximaProva: this.formData.notaMaximaProva,
-      turmaProva: this.formData.turmaProva,
-      disciplina: this.formData.disciplina,
-      quantidadeQuestoes: this.formData.quantidadeQuestoes,
-      questoes: this.form.value.questoes.map((questao: any, index: number) => ({
-        texto: questao.texto,
-        respostas: {
-          A: questao.A,
-          B: questao.B,
-          C: questao.C,
-          D: questao.D,
+  
+    const userInfo = this.informationUserService.getUserInfo();
+    const userId = userInfo?.id;
+  
+    if (!userId) {
+      this.poNotification.error('Oops, não conseguimos salvar a prova!');
+      return;
+    }
+  
+    const disciplinaSelecionada = this.disciplinas.find((d) => d.label === this.formData.disciplina);
+    const disciplinaId = disciplinaSelecionada ? disciplinaSelecionada.value : this.formData.disciplina;
+  
+    this.formService.getTopicsByDiscipline(disciplinaId).subscribe(topics => {
+      if (!topics || topics.length === 0) {
+        this.poNotification.error('Nenhum tópico encontrado para essa disciplina.');
+        return;
+      }
+  
+      const topicSelecionado = topics[0].value;
+  
+      const prova = {
+        testCode: this.formData.nomeProva,
+        testName: this.formData.nomeProva,
+        subjectId: disciplinaId,
+        testType: this.formData.formatoProva,
+        maxScore: this.formData.notaMaximaProva,
+        status: 'Aguardando',
+        gradeId: this.formData.turmaProva,
+        topic: topicSelecionado,
+        difficultyLevel: 'Mixed',
+        accessibility: false,
+        numberOfQuestions: this.form.value.questoes.length,
+        createdBy: userId,
+        questions: this.form.value.questoes.map((questao: any) => ({
+          statement: questao.texto,
+          alternatives: [
+            { text: questao.A },
+            { text: questao.B },
+            { text: questao.C },
+            { text: questao.D }
+          ],
+          correctAnswer: ['A', 'B', 'C', 'D'].indexOf(questao.respostaCorreta),
+          accessibility: false,
+          difficulty: 'Mixed',
+          topic: topicSelecionado,
+          isPublic: false
+        })),
+      };
+  
+      this.formService.saveTest(prova).subscribe({
+        next: (response) => {
+          this.poNotification.success('Prova salva com sucesso!');
+          this.route.navigate(['/cadastro-prova']);
         },
-        respostaCorreta: questao.respostaCorreta,
-      })),
-    };
-    console.log('prova', prova);
+        error: (error) => {
+          console.error('Erro ao salvar a prova:', error);
+          this.poNotification.error('Ocorreu um erro ao salvar a prova. Por favor, tente novamente mais tarde.');
+        }
+      });
+    });
   }
+  
 }

@@ -1,4 +1,5 @@
 <app-toolbar [title]="'Prova - ' + formData.nomeProva"></app-toolbar>
+
 <po-page-default>
   <div class="po-row animate-fade-in">
 
@@ -39,10 +40,6 @@
     <div class="animate-fade-in">
       <div formArrayName="questoes">
         <div *ngFor="let questao of questoes.controls; let index = index" [formGroupName]="index" class="questao-item">
-          <!-- <po-input class="po-md-12" [p-upper-case]="true" p-icon="ph ph-question" p-required="true"
-            [p-show-required]="true" p-clean formControlName="texto" p-label="Questão {{ index + 1 }}"
-            p-readonly="isReadonly">
-          </po-input> -->
           <po-input class="po-md-12" [p-upper-case]="true" p-icon="ph ph-question" p-required="true"
             [p-show-required]="true" p-clean formControlName="texto" p-label="Questão {{ index + 1 }}"
             p-readonly="isReadonly" (click)="onFocusInput(index + 1)">

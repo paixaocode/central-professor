@@ -21,6 +21,9 @@ export class CadastroQuestaoComponent implements OnInit {
 
   public colunasTabelaCadastroQuestao: Array<PoTableColumn> = [];
   public itemsCadastroQuestao: Array<any> = [];
+  public filteredItemsCadastroQuestao: Array<any> = [];
+  public searchTerm: string = '';
+
   public acoesTabelaCadastroQuestao: Array<PoTableAction> = [
     {
       action: this.onEditarQuestao.bind(this),
@@ -31,6 +34,7 @@ export class CadastroQuestaoComponent implements OnInit {
       action: this.onExcluirQuestao.bind(this),
       icon: 'ph ph-trash',
       label: 'Excluir',
+      type: 'danger'
     }
   ];
 
@@ -50,6 +54,46 @@ export class CadastroQuestaoComponent implements OnInit {
   private init() {
     this.colunasTabelaCadastroQuestao = this.cadastroQuestaoService.getColunasCadastroQuestao();
   }
+
+  private getTodasQuestoes(): void {
+    this.cadastroQuestaoService.getQuestoesCadastradas(1)
+      .pipe(
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe({
+        next: (questoesObj: QuestaoObj) => {
+          const questoesList = questoesObj.questions;
+          this.itemsCadastroQuestao = questoesList;
+          this.filteredItemsCadastroQuestao = questoesList;
+        },
+        error: e => {
+          console.error(e);
+        }
+      })
+  }
+
+  onSearchChange() {
+    const searchLowerCase = this.searchTerm.trim().toLowerCase();
+
+    if (searchLowerCase === '') {
+      this.filteredItemsCadastroQuestao = this.itemsCadastroQuestao;
+    } else {
+      this.filteredItemsCadastroQuestao = this.itemsCadastroQuestao.filter(item => {
+        // Extrai os campos relevantes e converte para minúsculas para busca sem distinção de maiúsculas/minúsculas
+        const testCode = item.testCode?.toLowerCase() || '';
+        const subjectName = item.subject?.name?.toLowerCase() || '';
+        const questionText = item.questionText?.toLowerCase() || '';  // Aqui você vai procurar também no texto da questão
+
+        // Realiza a busca considerando qualquer campo relevante
+        return (
+          testCode.includes(searchLowerCase) ||
+          subjectName.includes(searchLowerCase) ||
+          questionText.includes(searchLowerCase)  // Verifica no texto da questão
+        );
+      });
+    }
+  }
+
 
   onClickAbrirModalNovaQuestao() {
     this.resetarFormulario();
@@ -86,22 +130,6 @@ export class CadastroQuestaoComponent implements OnInit {
     danger: true
   };
 
-  private getTodasQuestoes(): void {
-    this.cadastroQuestaoService.getQuestoesCadastradas(1)
-    .pipe(
-      takeUntilDestroyed(this.destroyRef)
-    )
-    .subscribe({
-      next: (questoesObj: QuestaoObj) => {
-         const questoesList = questoesObj.questions;
-         this.itemsCadastroQuestao = questoesList;
-      },
-      error: e => {
-        console.error(e);
-      }
-    })
-  }
-
   private _closeModalCriarNovaQuestao() {
     this.modalNovaQuestao.close();
     this.getTodasQuestoes();
@@ -112,8 +140,7 @@ export class CadastroQuestaoComponent implements OnInit {
   }
 
   private onEditarQuestao(questao: any) {
-    // Melhoria Futura
-    console.log('Editar Questão: ', questao);
+    this.route.navigate(['ops']);
   }
 
   private onExcluirQuestao(questao: any) {
@@ -122,8 +149,8 @@ export class CadastroQuestaoComponent implements OnInit {
   }
 
   private processExcluirQuestao() {
-    if(!this.questaoId) {
-      return
+    if (!this.questaoId) {
+      return;
     }
     this.formGerarQuestaoService.deleteQuestion(this.questaoId)
       .pipe(
@@ -137,12 +164,12 @@ export class CadastroQuestaoComponent implements OnInit {
         next: () => {
           this.poNotification.success('Questão excluída com sucesso!');
           this.getTodasQuestoes();
-         },
+        },
         error: (err) => {
           const errorMessage = err.error?.message || 'Erro ao deletar a questão. Por favor, tente novamente mais tarde.';
           this.poNotification.error(errorMessage);
-         }
-      })
+        }
+      });
   }
 
   private resetarFormulario() {

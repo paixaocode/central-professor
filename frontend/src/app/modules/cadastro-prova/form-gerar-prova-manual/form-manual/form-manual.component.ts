@@ -1,6 +1,9 @@
 import { Component, Input, OnInit, OnChanges } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { Router } from '@angular/router';
+import { FormGerarProvaManualService } from '../form-gerar-prova-manual.service';
+import { InformationUserService } from 'src/app/services/informationUser.service';
+import { PoNotificationService } from '@po-ui/ng-components';
 
 @Component({
   selector: 'app-form-manual',
@@ -14,7 +17,14 @@ export class FormManualComponent implements OnInit, OnChanges {
   @Input() disciplinas: { value: string; label: string }[] = [];
   form: FormGroup = new FormGroup({});
 
-  constructor(private fb: FormBuilder, private route: Router) {}
+  constructor(
+    private fb: FormBuilder,
+    private route: Router,
+    private formGerarProvaService: FormGerarProvaManualService,
+    private informationUserService: InformationUserService,
+    private poNotification: PoNotificationService
+  ) {}
+  
 
   ngOnInit() {
     this.createForm();
@@ -87,28 +97,65 @@ export class FormManualComponent implements OnInit, OnChanges {
 
   onSubmit() {
     if (this.isReadonly) return;
-    const disciplinaSelecionada = this.disciplinas.find(d => d.label === this.formData.disciplina);
+  
+    const userInfo = this.informationUserService.getUserInfo();
+    const userId = userInfo?.id;
+  
+    if (!userId) {
+      this.poNotification.error('Oops, não conseguimos salvar a prova!');
+      return;
+    }
+  
+    const disciplinaSelecionada = this.disciplinas.find((d) => d.label === this.formData.disciplina);
     const disciplinaId = disciplinaSelecionada ? disciplinaSelecionada.value : this.formData.disciplina;
   
-    const prova = {
-      nomeProva: this.formData.nomeProva,
-      formatoProva: this.formData.formatoProva,
-      notaMaximaProva: this.formData.notaMaximaProva,
-      turmaProva: this.formData.turmaProva,
-      disciplina: disciplinaId,
-      quantidadeQuestoes: this.formData.quantidadeQuestoes,
-      questoes: this.form.value.questoes.map((questao: any, index: number) => ({
-        texto: questao.texto,
-        respostas: {
-          A: questao.A,
-          B: questao.B,
-          C: questao.C,
-          D: questao.D,
-        },
-        respostaCorreta: questao.respostaCorreta,
-      })),
-    };
-    console.log('prova', prova);
-  }
+    this.formGerarProvaService.getTopicsByDiscipline(disciplinaId).subscribe(topics => {
+      if (!topics || topics.length === 0) {
+        this.poNotification.error('Nenhum tópico encontrado para essa disciplina.');
+        return;
+      }
   
+      const topicSelecionado = topics[0].value;
+  
+      const prova = {
+        testCode: this.formData.nomeProva,
+        testName: this.formData.nomeProva,
+        subjectId: disciplinaId,
+        testType: this.formData.formatoProva,
+        maxScore: this.formData.notaMaximaProva,
+        status: 'Aguardando',
+        gradeId: this.formData.turmaProva,
+        topic: topicSelecionado,
+        difficultyLevel: 'Mixed',
+        accessibility: false,
+        numberOfQuestions: this.form.value.questoes.length,
+        createdBy: userId,
+        questions: this.form.value.questoes.map((questao: any) => ({
+          statement: questao.texto,
+          alternatives: [
+            { text: questao.A },
+            { text: questao.B },
+            { text: questao.C },
+            { text: questao.D }
+          ],
+          correctAnswer: ['A', 'B', 'C', 'D'].indexOf(questao.respostaCorreta),
+          accessibility: false,
+          difficulty: 'Mixed',
+          topic: topicSelecionado,
+          isPublic: false
+        })),
+      };
+  
+      this.formGerarProvaService.saveTest(prova).subscribe({
+        next: (response) => {
+          this.poNotification.success('Prova salva com sucesso!');
+          this.route.navigate(['/cadastro-prova']);
+        },
+        error: (error) => {
+          console.error('Erro ao salvar a prova:', error);
+          this.poNotification.error('Ocorreu um erro ao salvar a prova. Por favor, tente novamente mais tarde.');
+        }
+      });
+    });
+  }
 }

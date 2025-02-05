@@ -13,8 +13,8 @@ export class FormGerarProvaDinamicaComponent implements OnInit {
   formGerarProvaDinamica!: FormGroup;
 
   formatos = [
-    { label: 'Online', value: 'online' },
-    { label: 'Presencial', value: 'presencial' }
+    { label: 'Online', value: 'Online' },
+    { label: 'Presencial', value: 'Presencial' }
   ];
 
   notasMaximas = [
@@ -31,23 +31,9 @@ export class FormGerarProvaDinamicaComponent implements OnInit {
     { label: '10', value: 10 }
   ];
 
-  turmas = [
-    { label: '1º Ano A', value: '1A' },
-    { label: '1º Ano B', value: '1B' },
-    { label: '2º Ano A', value: '2A' },
-    { label: '2º Ano B', value: '2B' },
-    { label: '3º Ano A', value: '3A' },
-    { label: '3º Ano B', value: '3B' }
-  ];
-
-  disciplinas = [
-    { label: 'Português', value: 'portugues' },
-    { label: 'Matemática', value: 'matematica' },
-    { label: 'Física', value: 'fisica' },
-    { label: 'História', value: 'historia' },
-    { label: 'Geografia', value: 'geografia' },
-    { label: 'Química', value: 'quimica' }
-  ];
+  turmas: { value: string; label: string }[] = [];
+  disciplinas: { value: string; label: string }[] = [];
+  topicos: { value: string; label: string }[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -60,7 +46,8 @@ export class FormGerarProvaDinamicaComponent implements OnInit {
       formatoProva: ['', Validators.required],
       notaMaximaProva: ['', Validators.required],
       turmaProva: ['', Validators.required],
-      disciplina: ['', Validators.required]
+      disciplina: ['', Validators.required],
+      topico: ['', Validators.required]
     });
   
     this.formGerarProvaDinamica.valueChanges.subscribe(() => {
@@ -87,6 +74,14 @@ export class FormGerarProvaDinamicaComponent implements OnInit {
 
     this.formService.getGrades().subscribe(data => {
       this.turmas = data;
+    });
+
+    this.formGerarProvaDinamica.get('disciplina')?.valueChanges.subscribe(disciplineId => {
+      if (disciplineId) {
+        this.formService.getTopicsByDiscipline(disciplineId).subscribe(topics => {
+          this.topicos = topics;
+        });
+      }
     });
   }
   

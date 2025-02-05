@@ -1,9 +1,9 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { environment } from 'src/environments/environment';
+import { HttpClient } from "@angular/common/http";
+import { Injectable } from "@angular/core";
+import { map, Observable } from "rxjs";
+import { environment } from "src/environments/environment";
 
+// informacoesProva.service.ts
 @Injectable({
   providedIn: 'root'
 })
@@ -16,7 +16,7 @@ export class InformacoesProvaService {
   getDisciplinas(): Observable<{ value: string; label: string }[]> {
     return this.http.get<any>(`${this.baseUrl}subjects/allSubjects`).pipe(
       map((response: any) => {
-        return response.subjects.map((disciplina: { _id: any; name: any; }) => ({
+        return response.subjects.map((disciplina: { _id: any; name: any }) => ({
           value: disciplina._id,
           label: disciplina.name
         }));
@@ -31,6 +31,22 @@ export class InformacoesProvaService {
           value: grade._id,
           label: grade.name
         }));
+      })
+    );
+  }
+
+  getAllSubjects(): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}subjects/allSubjects`);
+  }
+
+  getTopicsByDiscipline(disciplineId: string): Observable<{ value: string; label: string }[]> {
+    return this.getAllSubjects().pipe(
+      map((response: any) => {
+        const disciplina = response.subjects.find((d: { _id: string }) => d._id === disciplineId);
+        return disciplina ? disciplina.topics.map((topico: { _id: string; name: string }) => ({
+          value: topico._id,
+          label: topico.name
+        })) : [];
       })
     );
   }

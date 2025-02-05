@@ -6,6 +6,7 @@ import { FormGerarProvaManualService } from './form-gerar-prova-manual/form-gera
 import { FormGerarProvaIaService } from './form-gerar-prova-ia/form-gerar-prova-ia.service';
 import { PoNotificationService } from '@po-ui/ng-components';
 import { FormGerarProvaDinamicaService } from './form-gerar-prova-dinamica/form-gerar-prova-dincamica.service';
+import { jsPDF } from 'jspdf';
 
 @Component({
   selector: 'app-cadastro-prova',
@@ -17,9 +18,10 @@ export class CadastroProvaComponent {
   @ViewChild('modalNovaProva') modalNovaProva!: PoModalComponent;
   @ViewChild('modalExcluirProva', { static: false }) modalExcluirProva!: PoModalComponent;
 
-
   public colunasTabelaCadastroProva: Array<PoTableColumn> = [];
   public itemsCadastroProva: Array<any> = [];
+  public filteredItemsCadastroProva: Array<any> = [];
+  public searchTerm: string = '';
   public isGerarProvaIA: boolean = false;
 
   public isFormManualValid: boolean = false;
@@ -74,9 +76,15 @@ export class CadastroProvaComponent {
       label: 'Editar',
     },
     {
+      action: this.onImprimirProva.bind(this),
+      icon: 'ph ph-printer',
+      label: 'Imprimir prova',
+    },
+    {
       action: this.onExcluirProva.bind(this),
       icon: 'ph ph-trash',
       label: 'Excluir',
+      type: 'danger'
     }
   ];
 
@@ -114,28 +122,24 @@ export class CadastroProvaComponent {
       this.atualizarEstadoBotaoLoadingModal();
     });
 
-
     this.init();
-    this.mockDados();
+    this.loadTests();
   }
 
   private init() {
     this.colunasTabelaCadastroProva = this.cadastroProvaService.getColunasCadastroProva();
   }
 
-  private mockDados() {
-    this.itemsCadastroProva = [
-      { codigoProva: 'P001', nomeProva: 'Prova de Matemática - 1º Semestre', disciplinaProva: 'Matemática', formatoProva: 'Presencial', notaMaximaProva: '10', turmaProva: '1º Ano A', status: 'statusProvaAtiva' },
-      { codigoProva: 'P002', nomeProva: 'Prova de Física - 2º Semestre', disciplinaProva: 'Física', formatoProva: 'Presencial', notaMaximaProva: '10', turmaProva: '2º Ano B', status: 'statusProvaEmElaboracao' },
-      { codigoProva: 'P003', nomeProva: 'Prova de História - 1º Semestre', disciplinaProva: 'História', formatoProva: 'Presencial', notaMaximaProva: '15', turmaProva: '3º Ano C', status: 'statusProvaAtiva' },
-      { codigoProva: 'P004', nomeProva: 'Prova de Geografia - 1º Semestre', disciplinaProva: 'Geografia', formatoProva: 'Online', notaMaximaProva: '10', turmaProva: '1º Ano B', status: 'statusProvaAtiva' },
-      { codigoProva: 'P005', nomeProva: 'Prova de Química - 3º Semestre', disciplinaProva: 'Química', formatoProva: 'Presencial', notaMaximaProva: '20', turmaProva: '2º Ano A', status: 'statusProvaInativa' },
-      { codigoProva: 'P006', nomeProva: 'Prova de Português - 2º Semestre', disciplinaProva: 'Português', formatoProva: 'Online', notaMaximaProva: '15', turmaProva: '1º Ano A', status: 'statusProvaAtiva' },
-      { codigoProva: 'P007', nomeProva: 'Prova de Matemática - 2º Semestre', disciplinaProva: 'Matemática', formatoProva: 'Online', notaMaximaProva: '10', turmaProva: '3º Ano B', status: 'statusProvaAtiva' },
-      { codigoProva: 'P008', nomeProva: 'Prova de Física - 1º Semestre', disciplinaProva: 'Física', formatoProva: 'Presencial', notaMaximaProva: '15', turmaProva: '2º Ano C', status: 'statusProvaEmElaboracao' },
-      { codigoProva: 'P009', nomeProva: 'Prova de História - 2º Semestre', disciplinaProva: 'História', formatoProva: 'Online', notaMaximaProva: '20', turmaProva: '1º Ano C', status: 'statusProvaInativa' },
-      { codigoProva: 'P010', nomeProva: 'Prova de Geografia - 2º Semestre', disciplinaProva: 'Geografia', formatoProva: 'Online', notaMaximaProva: '10', turmaProva: '3º Ano A', status: 'statusProvaAtiva' }
-    ];
+  private loadTests() {
+    this.cadastroProvaService.getAllTests().subscribe(
+      (response: any) => {
+        this.itemsCadastroProva = response.tests;
+        this.filteredItemsCadastroProva = this.itemsCadastroProva;
+      },
+      (error) => {
+        this.poNotification.error('Erro ao carregar provas');
+      }
+    );
   }
 
   onClickVoltar() {
@@ -163,15 +167,9 @@ export class CadastroProvaComponent {
     this.atualizarEstadoBotaoLoadingModal();
   }
 
-
-  switchGerarProva(event: any): void {
-    this.isGerarProvaIA = event;
-    this.atualizarEstadoBotaoLoadingModal();
-  }
-
   private atualizarEstadoBotaoLoadingModal(): void {
     let isFormValid = false;
-  
+
     if (this.tipoGeracaoProva === 'ia') {
       isFormValid = this.isFormIAValid;
     } else if (this.tipoGeracaoProva === 'manual') {
@@ -179,7 +177,7 @@ export class CadastroProvaComponent {
     } else if (this.tipoGeracaoProva === 'dinamica') {
       isFormValid = this.isFormIAValid;
     }
-  
+
     this.confirmarNovaProva.disabled = !isFormValid;
   }
 
@@ -190,11 +188,11 @@ export class CadastroProvaComponent {
   }
 
   private onVisualizarProva(prova: any) {
-    console.log('Visualizar Prova: ', prova);
+    this.route.navigate(['ops']);
   }
 
   private onEditarProva(prova: any) {
-    console.log('Editar Prova: ', prova);
+    this.route.navigate(['ops']);
   }
 
   private onExcluirProva(prova: any) {
@@ -203,7 +201,23 @@ export class CadastroProvaComponent {
   }
 
   private processExcluirProva() {
-    console.log(this.provaSelecionada);
+    console.log('prova', this.provaSelecionada);
+    if (!this.provaSelecionada || !this.provaSelecionada._id) {
+      this.poNotification.error('Erro ao excluir prova: ID não encontrado.');
+      return;
+    }
+
+    this.cadastroProvaService.deleteTest(this.provaSelecionada._id).subscribe(
+      () => {
+        this.poNotification.success('Prova excluída com sucesso!');
+        this.loadTests();
+        this._closeModalExcluirProva();
+      },
+      (error) => {
+        this.poNotification.error('Erro ao excluir prova. Tente novamente.');
+        console.error(error);
+      }
+    );
   }
 
   private processCriarNovaProva() {
@@ -232,5 +246,87 @@ export class CadastroProvaComponent {
     }
   }
 
-}
+  onSearchChange() {
+    if (this.searchTerm.trim() === '') {
+      this.filteredItemsCadastroProva = this.itemsCadastroProva;
+    } else {
+      this.filteredItemsCadastroProva = this.itemsCadastroProva.filter(item => {
+        return (
+          item.testCode?.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+          item.testName?.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+          item.subject?.name?.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+          item.class?.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+          item.testType?.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+          item.status?.toLowerCase().includes(this.searchTerm.toLowerCase())
+        );
+      });
+    }
+  }
 
+  private onImprimirProva(prova: any) {
+    if (!prova) {
+      this.poNotification.error('Erro ao imprimir: Prova não encontrada.');
+      return;
+    }
+
+    const doc = new jsPDF();
+    const corPrimaria = "#045b8f";
+
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(20);
+    doc.setTextColor(corPrimaria);
+    doc.text(`Prova: ${prova.testName || 'Sem Nome'}`, 10, 15);
+
+    doc.setFontSize(12);
+    doc.setTextColor(0);
+    doc.text(`Código: ${prova.testCode || 'N/A'}`, 10, 25);
+    doc.text(`Disciplina: ${prova.subject?.name || 'N/A'}`, 10, 32);
+    doc.text(`Dificuldade: ${prova.difficultyLevel || 'N/A'}`, 10, 39);
+    doc.text(`Tipo: ${prova.testType || 'N/A'}`, 10, 46);
+    doc.text(`Número de Questões: ${prova.questions?.length || 0}`, 10, 53);
+
+    doc.setDrawColor(corPrimaria);
+    doc.line(10, 60, 200, 60);
+
+    let yPosition = 70;
+    prova.questions?.forEach((questao: any, index: number) => {
+      if (!questao || !questao.statement) return;
+
+      doc.setFont("helvetica", "bold");
+      doc.setTextColor(corPrimaria);
+      doc.text(`${index + 1}. ${questao.statement}`, 10, yPosition);
+
+      yPosition += 8;
+      doc.setFont("helvetica", "normal");
+      doc.setTextColor(0);
+
+      if (Array.isArray(questao.alternatives)) {
+        questao.alternatives.forEach((alternativa: any, altIndex: number) => {
+          doc.text(`${String.fromCharCode(65 + altIndex)}. ${alternativa.text}`, 15, yPosition);
+          yPosition += 6;
+        });
+      }
+
+      yPosition += 5;
+      doc.setFont("helvetica", "italic");
+      doc.setTextColor(255, 0, 0);
+
+      const indexRespostaCorreta = questao.correctAnswer;
+      const respostaCorreta = indexRespostaCorreta !== undefined && indexRespostaCorreta !== null
+        ? `${String.fromCharCode(65 + indexRespostaCorreta)}. ${questao.alternatives[indexRespostaCorreta]?.text || 'N/A'}`
+        : 'N/A';
+
+      const respostaQuebrada = doc.splitTextToSize(`Resposta: ${respostaCorreta}`, 180);
+      doc.text(respostaQuebrada, 15, yPosition);
+      yPosition += respostaQuebrada.length * 6;
+    });
+
+    doc.setFontSize(10);
+    doc.setTextColor(150);
+    doc.text(`Gerado em: ${new Date().toLocaleDateString()} às ${new Date().toLocaleTimeString()}`, 10, 285);
+
+    doc.autoPrint();
+    window.open(doc.output('bloburl'), '_blank');
+  }
+
+}

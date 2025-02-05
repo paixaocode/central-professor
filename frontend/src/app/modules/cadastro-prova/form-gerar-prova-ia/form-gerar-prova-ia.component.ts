@@ -11,8 +11,8 @@ export class FormGerarProvaIaComponent implements OnInit {
   formGerarProvaIA!: FormGroup;
 
   formatos = [
-    { label: 'Online', value: 'online' },
-    { label: 'Presencial', value: 'presencial' }
+    { label: 'Online', value: 'Online' },
+    { label: 'Presencial', value: 'Presencial' }
   ];
 
   nivelDificuldadeOptions = [
@@ -22,6 +22,8 @@ export class FormGerarProvaIaComponent implements OnInit {
   ];
 
   disciplinas: { value: string; label: string }[] = [];
+  topicos: { value: string; label: string }[] = [];
+
 
   quantidadeQuestoes = [
     { label: '1', value: 1 },
@@ -62,6 +64,7 @@ export class FormGerarProvaIaComponent implements OnInit {
       quantidadeQuestoes: ['', Validators.required],
       nomeProva: ['', Validators.required],
       disciplina: ['', Validators.required],
+      topico: ['', Validators.required],
       turmaProva: ['', Validators.required],
       formatoProva: ['', Validators.required],
       notaMaximaProva: ['', Validators.required],
@@ -90,6 +93,14 @@ export class FormGerarProvaIaComponent implements OnInit {
 
     this.formService.getGrades().subscribe(data => {
       this.turmas = data;
+    });
+
+    this.formGerarProvaIA.get('disciplina')?.valueChanges.subscribe((disciplineId: string) => {
+      if (disciplineId) {
+        this.formService.getTopicsByDiscipline(disciplineId).subscribe(topics => {
+          this.topicos = topics;
+        });
+      }
     });
   }
 }
