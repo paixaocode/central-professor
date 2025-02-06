@@ -1,0 +1,78 @@
+<app-toolbar [title]="'Gerador de boletim escolar'"></app-toolbar>
+<img class="line" src="assets/images/line.png">
+<po-page-default>
+
+    <div class="animate-fade-in po-lg-8 po-xl-8 po-offset-lg-2 po-offset-xl-2">
+        <div class="po-row" [style.height.vh]="5"></div>
+
+        <form [formGroup]="boletimForm">
+
+            <po-input class="po-md-12" p-label="Nome do aluno" p-placeholder="Digite o nome do aluno" p-clean
+                p-icon="ph ph-user" formControlName="nome" [p-upper-case]="true"></po-input>
+
+            <po-input class="po-md-12 po-mt-1" p-label="Número da matrícula"
+                p-placeholder="Digite o número da matrícula" p-clean p-icon="ph ph-user-rectangle"
+                formControlName="matricula" [p-upper-case]="true" p-mask="999999"></po-input>
+
+            <po-input class="po-md-12 po-mt-1" p-label="Turma" p-placeholder="Escolha a turma" p-clean
+                p-icon="ph ph-users-four" formControlName="turma" [p-upper-case]="true"></po-input>
+
+            <po-input class="po-md-12 po-mt-1" p-label="Professor responsável"
+                p-placeholder="Nome do professor responsável" p-clean p-icon="ph ph-chalkboard-teacher"
+                formControlName="professor" [p-upper-case]="true"></po-input>
+
+            <div class="po-row" [style.height.vh]="5"></div>
+
+            <po-divider p-label="Disciplinas e Notas"></po-divider>
+
+            <div formArrayName="disciplinas">
+                <div *ngFor="let disciplina of disciplinasFormArray.controls; let i = index" [formGroupName]="i"
+                    class="disciplinas">
+
+                    <po-select class="po-md-6 po-mt-1" p-label="Disciplina" p-placeholder="Selecione a disciplina"
+                        [p-options]="disciplinas" formControlName="disciplina">
+                    </po-select>
+
+                    <po-select class="po-md-4 po-mt-1" p-label="Nota" p-placeholder="Escolha a nota" [p-options]="notas"
+                        formControlName="nota">
+                    </po-select>
+
+                    <po-button class="po-md-2 po-mt-5" p-icon="ph ph-trash" p-kind="primary" [p-danger]="true"
+                        (p-click)="removeDisciplina(i)">
+                    </po-button>
+                </div>
+            </div>
+
+            <po-button class="po-md-12 po-mt-1" p-icon="ph ph-plus" p-label="Adicionar Disciplina"
+                (p-click)="onClickAddDisciplina()" p-kind="tertiary"></po-button>
+
+            <div class="po-row" [style.height.vh]="5"></div>
+
+
+            <po-divider p-label="Frequência"></po-divider>
+
+            <po-input class="po-md-6 po-mt-1" p-label="% De Frequência nas aulas"
+                p-placeholder="Digite a porcentagem da frequência" p-clean p-icon="ph ph-calendar-check"
+                formControlName="frequencia" p-mask="999"></po-input>
+
+            <po-input class="po-md-6 po-mt-1" p-label="Quantidade de faltas"
+                p-placeholder="Digite a quantidade de ausências" p-clean p-icon="ph ph-calendar-x"
+                formControlName="ausencias" p-mask="999"></po-input>
+
+            <div class="po-row" [style.height.vh]="5"></div>
+
+            <po-divider p-label="Observações do professor"></po-divider>
+
+            <po-textarea class="po-md-12" [p-rows]="5" p-label="Observação" formControlName="observacoes"></po-textarea>
+
+            <po-button class="po-md-12 po-mt-2" p-icon="ph ph-file-pdf" p-label="Emitir boletim" p-kind="primary"
+                (p-click)="onClickEmitirBoletim()" [p-disabled]="!boletimForm.valid"></po-button>
+
+        </form>
+
+        <div class="po-row" [style.height.vh]="25"></div>
+    </div>
+
+    <app-chatbot></app-chatbot>
+
+</po-page-default>

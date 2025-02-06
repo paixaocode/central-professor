@@ -24,7 +24,7 @@ export class MenuComponent implements OnInit {
           { label: 'Cadastro de Provas', link: '/cadastro-prova', shortLabel: 'Cad. Prova', icon: 'ph ph-clipboard-text' }
         ]
       },
-      { label: 'Gerador de boletim', link: "/home", shortLabel: "Boletim", icon: "ph ph-certificate" },
+      { label: 'Boletim', link: "/boletim", shortLabel: "boletim", icon: "ph ph-certificate" },
       { label: 'Mestre em Ação', link: "/mestre-acao", shortLabel: "Mestre", icon: "ph ph-chalkboard-teacher" },
       { label: 'Sair', link: '/login', shortLabel: 'Sair', icon: 'ph ph-sign-out' }
     ];

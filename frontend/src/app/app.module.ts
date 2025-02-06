@@ -12,12 +12,10 @@ import { MenuModule } from './modules/menu/menu.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
-import { PerfilComponent } from './modules/perfil/perfil.component';
-import { OpsComponent } from './modules/ops/ops.component';
 
 @NgModule({
   declarations: [
-    AppComponent,
+    AppComponent
   ],
   bootstrap: [AppComponent],
   imports: [

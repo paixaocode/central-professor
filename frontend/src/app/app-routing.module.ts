@@ -34,6 +34,11 @@ export const routes: Routes = [
           import('./modules/cadastro-prova/cadastro-prova.module').then((m) => m.CadastroProvaModule),
       },
       {
+        path: 'boletim',
+        loadChildren: () =>
+          import('./modules/gerador-boletim/gerador-boletim.module').then((m) => m.GeradorBoletimModule),
+      },
+      {
         path: 'cadastro-questao',
         loadChildren: () =>
           import('./modules/cadastro-questao/cadastro-questao.module').then((m) => m.CadastroQuestaoModule),
