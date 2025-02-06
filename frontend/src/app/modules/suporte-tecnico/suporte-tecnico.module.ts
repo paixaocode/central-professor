@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { PoModule } from '@po-ui/ng-components';
+import { PoIconModule, PoModule } from '@po-ui/ng-components';
 import { PoImageModule } from '@po-ui/ng-components';
 
 import { ToolbarModule } from '../toolbar/toolbar.module';
@@ -18,6 +18,7 @@ import { SuporteTecnicoRoutingModule } from './suporte-tecnico.routing';
     CommonModule,
     PoModule,
     PoImageModule,
+    PoIconModule,
     ToolbarModule,
     FormsModule,
     ReactiveFormsModule,
