@@ -22,6 +22,11 @@
                 [p-items]="filteredItemsCadastroQuestao" [p-sort]="true" [p-actions]="acoesTabelaCadastroQuestao"
                 [p-striped]="true" p-container [p-draggable]="true">
             </po-table>
+            <app-pagination
+                [totalPages]="totalPaginas"
+                [currentPage]="paginaAtual"
+                (pageChange)="onPageChange($event)">
+            </app-pagination>
         </div>
     </div>
 
