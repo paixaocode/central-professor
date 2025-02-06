@@ -1,4 +1,4 @@
-import { Component, DestroyRef, OnInit } from '@angular/core';
+import { Component, DestroyRef, EventEmitter, OnInit, Output } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { FormGerarQuestaoService } from './form-gerar-questao.service';
@@ -12,7 +12,8 @@ import { PoNotificationService, PoSelectOption } from '@po-ui/ng-components';
   styleUrl: './form-gerar-questao.component.css'
 })
 export class FormGerarQuestaoComponent implements OnInit {
-
+  
+  @Output() limparFormulario = new EventEmitter<void>();
   form: UntypedFormGroup = new UntypedFormGroup({});
 
   formatosBool = [
@@ -59,13 +60,15 @@ export class FormGerarQuestaoComponent implements OnInit {
 
     const questionData = this.form.getRawValue();
 
+    console.log(questionData);
+
     this.formService.postQuestionForm(questionData)
       .pipe(
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe({
         next: () => {
-          this.form.reset();
+          this.resetFormulario();
           this.poNotification.success('Questão cadastrada com sucesso!');
          },
         error: (err) => {
@@ -123,7 +126,7 @@ export class FormGerarQuestaoComponent implements OnInit {
       this.formatosTopics = selectedSubject.topics.map((topic: Topic) => (
         {
           label: topic.name,
-          value: topic.name,
+          value: topic._id,
       }
     ));
     } else {
@@ -161,5 +164,9 @@ export class FormGerarQuestaoComponent implements OnInit {
 
   getAlternativesControls(): FormArray {
     return this.form.get('alternatives') as FormArray;
+  }
+
+  resetFormulario(): void {
+    this.form.reset();
   }
 }

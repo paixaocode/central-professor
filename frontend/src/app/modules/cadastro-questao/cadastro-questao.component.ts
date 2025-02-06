@@ -4,8 +4,9 @@ import { PoModalAction, PoModalComponent, PoNotificationService, PoTableAction, 
 import { CadastroQuestaoService } from './cadastro-questao.service';
 import { FormGerarQuestaoService } from './form-gerar-questao/form-gerar-questao.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { CadastroQuestao, QuestaoObj } from './cadastro-questao.models';
+import { QuestaoObj } from './cadastro-questao.models';
 import { finalize } from 'rxjs';
+import { FormGerarQuestaoComponent } from './form-gerar-questao/form-gerar-questao.component';
 
 @Component({
   selector: 'app-cadastro-questao',
@@ -16,8 +17,11 @@ export class CadastroQuestaoComponent implements OnInit {
 
   @ViewChild('modalNovaQuestao') modalNovaQuestao!: PoModalComponent;
   @ViewChild('modalExcluirQuestao', { static: false }) modalExcluirQuestao!: PoModalComponent;
+  @ViewChild(FormGerarQuestaoComponent) formGerarQuestao!: FormGerarQuestaoComponent;
 
   questaoId: string | null = null;
+  totalPaginas!: number;
+  paginaAtual: number = 1;
 
   public colunasTabelaCadastroQuestao: Array<PoTableColumn> = [];
   public itemsCadastroQuestao: Array<any> = [];
@@ -48,15 +52,15 @@ export class CadastroQuestaoComponent implements OnInit {
 
   ngOnInit(): void {
     this.init();
-    this.getTodasQuestoes();
+    this.getTodasQuestoes(this.paginaAtual);
   }
 
   private init() {
     this.colunasTabelaCadastroQuestao = this.cadastroQuestaoService.getColunasCadastroQuestao();
   }
 
-  private getTodasQuestoes(): void {
-    this.cadastroQuestaoService.getQuestoesCadastradas(1)
+  private getTodasQuestoes(page:number): void {
+    this.cadastroQuestaoService.getQuestoesCadastradas(page)
       .pipe(
         takeUntilDestroyed(this.destroyRef)
       )
@@ -65,6 +69,7 @@ export class CadastroQuestaoComponent implements OnInit {
           const questoesList = questoesObj.questions;
           this.itemsCadastroQuestao = questoesList;
           this.filteredItemsCadastroQuestao = questoesList;
+          this.totalPaginas = questoesObj.totalPages;
         },
         error: e => {
           console.error(e);
@@ -104,6 +109,11 @@ export class CadastroQuestaoComponent implements OnInit {
     this.route.navigate(['home']);
   }
 
+  onPageChange(newPage: number): void {
+    this.paginaAtual = newPage;
+    this.getTodasQuestoes(newPage)
+  }
+
   closeModalNovaQuestao: PoModalAction = {
     action: () => {
       this._closeModalCriarNovaQuestao();
@@ -131,8 +141,9 @@ export class CadastroQuestaoComponent implements OnInit {
   };
 
   private _closeModalCriarNovaQuestao() {
+    this.limparForm();
     this.modalNovaQuestao.close();
-    this.getTodasQuestoes();
+    this.getTodasQuestoes(this.paginaAtual);
   }
 
   private _closeModalExcluirQuestao() {
@@ -163,7 +174,7 @@ export class CadastroQuestaoComponent implements OnInit {
       .subscribe({
         next: () => {
           this.poNotification.success('Questão excluída com sucesso!');
-          this.getTodasQuestoes();
+          this.getTodasQuestoes(this.paginaAtual);
         },
         error: (err) => {
           const errorMessage = err.error?.message || 'Erro ao deletar a questão. Por favor, tente novamente mais tarde.';
@@ -174,5 +185,9 @@ export class CadastroQuestaoComponent implements OnInit {
 
   private resetarFormulario() {
     this.formGerarQuestaoService.resetFormData();
+  }
+
+  limparForm(): void {
+    this.formGerarQuestao.resetFormulario();
   }
 }

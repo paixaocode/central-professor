@@ -1,0 +1,21 @@
+<div class="pagination">
+  <button (click)="previousPage()" [disabled]="currentPage === 1">
+    <po-icon 
+      p-icon="ph ph-arrow-line-left"
+      p-size="lg">
+    </po-icon>
+  </button>
+
+  <button *ngFor="let page of pageNumbers"
+          (click)="goToPage(page)"
+          [class.active]="isPageActive(page)">
+    {{ page }}
+  </button>
+
+  <button (click)="nextPage()" [disabled]="currentPage === totalPages">
+    <po-icon 
+      p-icon="ph ph-arrow-line-right" 
+      p-size="lg">
+    </po-icon>
+  </button>
+</div>
