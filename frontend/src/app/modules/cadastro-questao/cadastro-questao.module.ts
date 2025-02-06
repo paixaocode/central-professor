@@ -8,6 +8,7 @@ import { CadastroQuestaoRoutingModule } from './cadastro-questao.routing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToolbarModule } from '../toolbar/toolbar.module';
 import { ChatbotModule } from '../chatbot/chatbot.module';
+import { PaginationModule } from '../pagination/pagination.module';
 
 
 
@@ -23,7 +24,8 @@ import { ChatbotModule } from '../chatbot/chatbot.module';
     FormsModule,
     ReactiveFormsModule,
     ToolbarModule,
-    ChatbotModule
+    ChatbotModule,
+    PaginationModule
   ]
 })
 export class CadastroQuestaoModule { }
