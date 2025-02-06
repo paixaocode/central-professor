@@ -3,6 +3,7 @@ import { NgModule } from "@angular/core";
 import { BrowserModule } from "@angular/platform-browser";
 
 import { PoModule } from "@po-ui/ng-components";
+import { ToolbarModule } from "../toolbar/toolbar.module";
 
 import { MestreAcaoComponent } from "./mestre-acao.component";
 import { MestreAcaoRoutingModule } from "./mestre-acao.routing";
@@ -13,6 +14,7 @@ import { MestreAcaoRoutingModule } from "./mestre-acao.routing";
   imports: [
     CommonModule,
     PoModule,
+    ToolbarModule,
     MestreAcaoRoutingModule,
   ],
   exports: [MestreAcaoComponent],
