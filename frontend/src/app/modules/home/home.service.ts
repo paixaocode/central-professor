@@ -26,4 +26,10 @@ export class HomeService {
       map(response => response.articles.slice(0, 5))
     );
   }
+
+  getFeriados(): Observable<any[]> {
+    const urlFeriados = `https://api.invertexto.com/v1/holidays/2025?token=${environment.tokenInvertexto}`;
+    return this.http.get<any[]>(urlFeriados);
+  }
+  
 }

@@ -200,6 +200,10 @@ export class CadastroProvaComponent {
     this.modalExcluirProva.open();
   }
 
+  onShowMore(){
+    
+  }
+
   private processExcluirProva() {
     console.log('prova', this.provaSelecionada);
     if (!this.provaSelecionada || !this.provaSelecionada._id) {

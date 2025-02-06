@@ -19,7 +19,7 @@
         <div class="po-mt-2 po-ml-1">
             <po-table [p-columns]="colunasTabelaCadastroProva" [p-hide-columns-manager]="true" [p-height]="400"
                 [p-items]="filteredItemsCadastroProva" [p-sort]="true" [p-actions]="acoesTabelaCadastroProva"
-                [p-striped]="true" p-container [p-draggable]="true">
+                [p-striped]="true" p-container [p-draggable]="true" [p-show-more-disabled]="true" (p-show-more)="onShowMore()">
             </po-table>
         </div>
     </div>

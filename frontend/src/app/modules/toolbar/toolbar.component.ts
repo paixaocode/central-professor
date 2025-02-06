@@ -19,7 +19,7 @@ export class ToolbarComponent implements OnInit {
       type: 'danger',
       action: (item: PoToolbarAction) => this.onClickNotification(item)
     },
-    { icon: 'ph ph-chat', label: 'Nova mensagem', type: 'danger', action: (item: PoToolbarAction) => this.openDialog(item) }
+    { icon: 'ph ph-chat', label: 'Você tem uma nova mensagem!', type: 'danger', action: (item: PoToolbarAction) => this.openDialog(item) }
   ];
 
   profile: PoToolbarProfile = {
@@ -59,7 +59,7 @@ export class ToolbarComponent implements OnInit {
   }
 
   onClickNotification(item: PoToolbarAction) {
-    window.open('https://www.google.com.br', '_blank');
+    this.router.navigate(['/mestre-acao']);
     item.type = 'default';
   }
 

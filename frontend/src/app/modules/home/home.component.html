@@ -2,26 +2,69 @@
 <img class="line" src="assets/images/line.png">
 
 <po-page-default>
-    <div class="animate-fade-in po-mt-2">
-        <po-widget class="po-md-4 dolar-widget" [p-height]="200" p-title="💰 Dólar Atual">
-            <div class="po-text-center dolar-valor" [ngStyle]="{'font-weight': 'bold', 'font-size': '2rem'}">
-                {{ dolar ? 'BRL ' + dolar.toFixed(2) : 'Carregando...' }}
-            </div>
-        </po-widget>
+  <div class="animate-fade-in po-mt-2">
 
-        <po-widget class="po-md-8" [p-height]="200" p-title="📰 Notícias da Educação">
-            <div *ngIf="noticias.length > 0; else loading">
-              <ul class="news-list">
-                <li *ngFor="let noticia of noticias">
-                  <a [href]="noticia.url" target="_blank">{{ noticia.title }}</a>
-                </li>
-              </ul>
-            </div>
-            <ng-template #loading>
-              <div class="po-text-center">Carregando notícias...</div>
-            </ng-template>
-          </po-widget>
-          
-    </div>
-    <app-chatbot></app-chatbot>
+    <po-widget class="po-md-12 dolar-widget" [p-height]="200" p-title="Feriados">
+      <div class="calendario-widget">
+        <div class="calendario-container">
+          <div class="calendario-header">{{ mesAtual }}</div>
+          <div class="calendario-body">
+            <span (click)="abrirGoogleAgendaDia(diaAtual)" class="calendario-dia">{{ diaAtual }}</span>
+          </div>
+        </div>
+
+        <div class="feriados-container">
+          <div *ngIf="feriados.length > 0; else loadingFeriados" class="feriados-list-wrapper">
+            <ul class="feriados-list">
+              <li *ngFor="let feriado of feriados" [@fadeIn]>
+                <span class="feriado-data">{{ feriado.dataFormatada }}</span>
+                <span class="feriado-nome">
+                  <a href="javascript:void(0)" (click)="abrirGoogleAgenda(feriado)" class="feriado-link">{{ feriado.name
+                    }}</a>
+                </span>
+              </li>
+            </ul>
+          </div>
+          <ng-template #loadingFeriados>
+            <div class="po-text-center">Carregando feriados...</div>
+          </ng-template>
+        </div>
+      </div>
+    </po-widget>
+
+
+    <po-widget class="po-md-4 po-mt-2 dolar-widget" [p-height]="200" p-title="Dólar atual">
+      <div class="po-text-center po-mt-4 dolar-valor" [ngStyle]="{'font-weight': 'bold', 'font-size': '2rem'}">
+        {{ dolar ? 'BRL ' + dolar.toFixed(2) : 'Carregando...' }}
+      </div>
+    </po-widget>
+
+    <po-widget class="po-md-8 po-mt-2" [p-height]="200" p-title="Notícias ao redor do mundo">
+      <div *ngIf="noticias.length > 0; else loading">
+        <ul class="news-list">
+          <li *ngFor="let noticia of noticias">
+            <a [href]="noticia.url" target="_blank">{{ noticia.title }}</a>
+          </li>
+        </ul>
+      </div>
+      <ng-template #loading>
+        <div class="po-text-center">Carregando notícias...</div>
+      </ng-template>
+    </po-widget>
+
+    <po-widget class="po-md-12 po-mt-2" [p-height]="500" p-title="Ver mais" (p-title-action)="verMaisClick($event)">
+
+      <po-chart class="po-md-12 po-mt-2" p-title="Alunos com maior aproveitamento" [p-options]="options"
+        [p-categories]="categories" [p-series]="participationByCountryInWorldExports"
+        [p-type]="participationByCountryInWorldExportsType">
+      </po-chart>
+
+    </po-widget>
+
+    <div class="po-row" [style.height.vh]="25"></div>
+
+  </div>
+
+  <app-chatbot></app-chatbot>
+
 </po-page-default>
