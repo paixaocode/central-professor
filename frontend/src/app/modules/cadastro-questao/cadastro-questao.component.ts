@@ -1,4 +1,4 @@
-import { Component, DestroyRef, OnInit, ViewChild } from '@angular/core';
+import { Component, DestroyRef, Input, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { PoModalAction, PoModalComponent, PoNotificationService, PoTableAction, PoTableColumn } from '@po-ui/ng-components';
 import { CadastroQuestaoService } from './cadastro-questao.service';
@@ -6,6 +6,7 @@ import { FormGerarQuestaoService } from './form-gerar-questao/form-gerar-questao
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CadastroQuestao, QuestaoObj } from './cadastro-questao.models';
 import { finalize } from 'rxjs';
+import { FormGerarQuestaoComponent } from './form-gerar-questao/form-gerar-questao.component';
 
 @Component({
   selector: 'app-cadastro-questao',
@@ -16,6 +17,7 @@ export class CadastroQuestaoComponent implements OnInit {
 
   @ViewChild('modalNovaQuestao') modalNovaQuestao!: PoModalComponent;
   @ViewChild('modalExcluirQuestao', { static: false }) modalExcluirQuestao!: PoModalComponent;
+  @ViewChild(FormGerarQuestaoComponent) formGerarQuestao!: FormGerarQuestaoComponent;
 
   questaoId: string | null = null;
 
@@ -131,6 +133,7 @@ export class CadastroQuestaoComponent implements OnInit {
   };
 
   private _closeModalCriarNovaQuestao() {
+    this.limparForm();
     this.modalNovaQuestao.close();
     this.getTodasQuestoes();
   }
@@ -174,5 +177,9 @@ export class CadastroQuestaoComponent implements OnInit {
 
   private resetarFormulario() {
     this.formGerarQuestaoService.resetFormData();
+  }
+
+  limparForm(): void {
+    this.formGerarQuestao.resetFormulario();
   }
 }
