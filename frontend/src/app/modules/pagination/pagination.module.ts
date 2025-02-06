@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { PoIconModule, PoModule } from '@po-ui/ng-components';
 import { PaginationComponent } from './pagination.component';
 
 
@@ -9,7 +10,9 @@ import { PaginationComponent } from './pagination.component';
     PaginationComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    PoModule,
+    PoIconModule
   ],
   exports: [
     PaginationComponent
