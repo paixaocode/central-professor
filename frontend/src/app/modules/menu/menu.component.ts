@@ -26,6 +26,7 @@ export class MenuComponent implements OnInit {
       },
       { label: 'Gerador de boletim', link: "/home", shortLabel: "Boletim", icon: "ph ph-certificate" },
       { label: 'Mestre em Ação', link: "/mestre-acao", shortLabel: "Mestre", icon: "ph ph-chalkboard-teacher" },
+      { label: 'Suporte Técnico', link: "/suporte-tecnico", shortLabel: "Tecnico", icon: "ph ph-wrench" },
       { label: 'Sair', link: '/login', shortLabel: 'Sair', icon: 'ph ph-sign-out' }
     ];
 
