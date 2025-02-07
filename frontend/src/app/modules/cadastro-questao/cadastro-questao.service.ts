@@ -20,7 +20,7 @@ export class CadastroQuestaoService {
     return [
       { property: 'statement', type: 'string', label: 'Questão', width: '40%' },
       { property: 'subject.name', type: 'string', label: 'Matéria', width: '10%' },
-      { property: 'topic', type: 'string', label: 'Tópico', width: '10%' },
+      { property: 'topicId', type: 'string', label: 'Tópico', width: '10%' },
       { property: 'difficulty', type: 'string', label: 'Nível de dificuldade', width: '10%' },
       { property: 'grade.name', type: 'string', label: 'Grade', width: '10%' },
       { property: 'isPublic', type: 'boolean', label: 'Publica', width: '10%' },

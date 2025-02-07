@@ -30,7 +30,7 @@ export class ToolbarComponent implements OnInit {
 
   profileActions: Array<PoToolbarAction> = [
     { icon: 'ph ph-user', label: 'Meu perfil', action: () => this.goToProfile() },
-    { icon: 'ph ph-gear', label: 'Configurações', action: (item: PoToolbarAction) => this.showAction(item) },
+    { icon: 'ph ph-gear', label: 'Configurações', action: () => this.goToOps() },
     { icon: 'ph ph-sign-out', label: 'Sair', type: 'danger', separator: true, action: () => this.goToLogin() }
   ];
 
@@ -78,6 +78,10 @@ export class ToolbarComponent implements OnInit {
 
   goToProfile(): void {
     this.router.navigate(['/perfil']);
+  }
+
+  goToOps(){
+    this.router.navigate(['/ops']);
   }
 
   goToLogin(): void {

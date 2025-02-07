@@ -7,6 +7,7 @@ import { ToolbarModule } from "../toolbar/toolbar.module";
 
 import { MestreAcaoComponent } from "./mestre-acao.component";
 import { MestreAcaoRoutingModule } from "./mestre-acao.routing";
+import { ChatbotModule } from "../chatbot/chatbot.module";
 
 
 @NgModule({
@@ -16,6 +17,7 @@ import { MestreAcaoRoutingModule } from "./mestre-acao.routing";
     PoModule,
     ToolbarModule,
     MestreAcaoRoutingModule,
+    ChatbotModule
   ],
   exports: [MestreAcaoComponent],
 })

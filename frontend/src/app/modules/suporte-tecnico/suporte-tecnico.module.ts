@@ -8,7 +8,7 @@ import { PoImageModule } from '@po-ui/ng-components';
 import { ToolbarModule } from '../toolbar/toolbar.module';
 import { SuporteTecnicoComponent } from './suporte-tecnico.component';
 import { SuporteTecnicoRoutingModule } from './suporte-tecnico.routing';
-
+import { ChatbotModule } from '../chatbot/chatbot.module';
 
 @NgModule({
   declarations: [
@@ -22,7 +22,8 @@ import { SuporteTecnicoRoutingModule } from './suporte-tecnico.routing';
     ToolbarModule,
     FormsModule,
     ReactiveFormsModule,
-    SuporteTecnicoRoutingModule
+    SuporteTecnicoRoutingModule,
+    ChatbotModule
   ],
   exports: [
     SuporteTecnicoComponent

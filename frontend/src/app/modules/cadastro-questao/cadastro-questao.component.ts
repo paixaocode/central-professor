@@ -118,7 +118,7 @@ export class CadastroQuestaoComponent implements OnInit {
     action: () => {
       this._closeModalCriarNovaQuestao();
     },
-    label: 'Cancelar',
+    label: 'Fechar',
     danger: true
   };
 
